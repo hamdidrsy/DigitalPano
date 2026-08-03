@@ -29,6 +29,7 @@ public sealed class PanoControllerTests
         PanoContentItemViewModel item = Assert.Single(model.Items);
         Assert.Equal("Aktif duyuru", item.Title);
         Assert.Equal("Giriş", model.ScreenName);
+        Assert.Equal("Aktif kayan yazı", Assert.Single(model.TickerMessages));
     }
 
     [Fact]
@@ -93,6 +94,21 @@ public sealed class PanoControllerTests
             IsActive = true
         };
         dbContext.Screens.AddRange(targetScreen, otherScreen);
+        dbContext.TickerMessages.AddRange(
+            new TickerMessage
+            {
+                Text = "Aktif kayan yazı",
+                StartDateUtc = utcNow.AddHours(-1),
+                EndDateUtc = utcNow.AddHours(1),
+                IsActive = true
+            },
+            new TickerMessage
+            {
+                Text = "Süresi dolmuş kayan yazı",
+                StartDateUtc = utcNow.AddHours(-2),
+                EndDateUtc = utcNow.AddHours(-1),
+                IsActive = true
+            });
         dbContext.Announcements.AddRange(
             CreateAnnouncement(201, "Aktif duyuru", utcNow.AddHours(-1), utcNow.AddHours(1), targetScreen),
             CreateAnnouncement(202, "Süresi dolmuş", utcNow.AddHours(-2), utcNow.AddHours(-1), targetScreen),

@@ -1,0 +1,4 @@
+@model TickerMessage
+@{ ViewData["Title"] = "Kayan Yazı Sil"; }
+<div class="page-heading"><div><p class="admin-eyebrow">Kayan yazılar</p><h1>Kayan yazıyı sil</h1></div></div>
+<section class="content-panel delete-panel"><div class="alert alert-warning">Bu mesaj pano alt bandından kalıcı olarak kaldırılacaktır.</div><blockquote>@Model.Text</blockquote><div class="form-actions justify-content-start"><form asp-action="Delete" asp-route-id="@Model.Id" method="post"><button class="btn btn-danger" type="submit">Evet, sil</button></form><a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a></div></section>

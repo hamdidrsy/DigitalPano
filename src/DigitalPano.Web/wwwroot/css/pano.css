@@ -50,6 +50,24 @@ body {
   width: 4.2vw;
 }
 
+.institution-logo {
+  align-items: center;
+  background: #fff;
+  border-radius: 1.1vw;
+  display: flex;
+  height: 4.2vw;
+  justify-content: center;
+  overflow: hidden;
+  padding: .35vw;
+  width: 4.2vw;
+}
+
+.institution-logo img {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
 .institution-brand h1 {
   font-size: 1.7vw;
   margin: 0;
@@ -209,8 +227,47 @@ body {
   align-items: center;
   border-top: 1px solid rgba(255, 255, 255, .1);
   color: #94a3b8;
-  display: flex;
+  display: grid;
   font-size: .8vw;
-  justify-content: space-between;
-  padding: 0 2.2vw;
+  grid-template-columns: auto minmax(0, 1fr);
+  overflow: hidden;
+  padding: 0;
+}
+
+.ticker-label {
+  align-items: center;
+  align-self: stretch;
+  background: var(--pano-primary);
+  color: #fff;
+  display: flex;
+  font-size: .75vw;
+  font-weight: 800;
+  letter-spacing: .14em;
+  padding: 0 1.5vw;
+  position: relative;
+  z-index: 2;
+}
+
+.ticker-viewport {
+  align-items: center;
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-track {
+  animation: ticker-scroll 35s linear infinite;
+  color: #f8fafc;
+  display: flex;
+  font-size: 1.05vw;
+  min-width: max-content;
+}
+
+.ticker-track span {
+  padding-right: 10vw;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }

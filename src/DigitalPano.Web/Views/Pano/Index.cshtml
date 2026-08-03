@@ -2,6 +2,12 @@
 @using DigitalPano.Web.Data.Entities
 @{
     Layout = null;
+    string? logoUrl = Model.LogoMediaId.HasValue
+        ? Url.Action("Media", "Pano", new { slug = Model.ScreenSlug, mediaId = Model.LogoMediaId, key = Model.DeviceKey })
+        : null;
+    string tickerText = Model.TickerMessages.Count > 0
+        ? string.Join("     •     ", Model.TickerMessages)
+        : Model.InstitutionName;
 }
 <!DOCTYPE html>
 <html lang="tr">
@@ -24,7 +30,14 @@
           data-heartbeat-url="@Url.Action("Heartbeat", "Pano", new { slug = Model.ScreenSlug, key = Model.DeviceKey })">
         <header class="pano-header">
             <div class="institution-brand">
-                <div class="institution-mark">DP</div>
+                @if (logoUrl is not null)
+                {
+                    <div class="institution-logo"><img src="@logoUrl" alt="@Model.InstitutionName logosu" /></div>
+                }
+                else
+                {
+                    <div class="institution-mark">DP</div>
+                }
                 <div>
                     <h1>@Model.InstitutionName</h1>
                     <span>@Model.ScreenName</span>
@@ -93,8 +106,13 @@
         </section>
 
         <footer class="pano-footer">
-            <span>@Model.InstitutionName</span>
-            <span>DigitalPano</span>
+            <span class="ticker-label">DUYURU</span>
+            <div class="ticker-viewport">
+                <div class="ticker-track">
+                    <span>@tickerText</span>
+                    <span aria-hidden="true">@tickerText</span>
+                </div>
+            </div>
         </footer>
     </main>
     <script src="~/js/pano.js" asp-append-version="true"></script>

@@ -1,0 +1,11 @@
+@model TickerMessageFormViewModel
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+<section class="content-panel form-section ticker-form-panel">
+    <div class="mb-3"><label asp-for="Text" class="form-label"></label><textarea asp-for="Text" class="form-control" rows="4" maxlength="1000"></textarea><span asp-validation-for="Text" class="text-danger"></span></div>
+    <div class="row g-3">
+        <div class="col-md-6"><label asp-for="StartDate" class="form-label"></label><input asp-for="StartDate" asp-format="{0:yyyy-MM-ddTHH:mm}" type="datetime-local" class="form-control" /><span asp-validation-for="StartDate" class="text-danger"></span></div>
+        <div class="col-md-6"><label asp-for="EndDate" class="form-label"></label><input asp-for="EndDate" asp-format="{0:yyyy-MM-ddTHH:mm}" type="datetime-local" class="form-control" /><span asp-validation-for="EndDate" class="text-danger"></span></div>
+        <div class="col-md-6"><label asp-for="SortOrder" class="form-label"></label><input asp-for="SortOrder" class="form-control" /><span asp-validation-for="SortOrder" class="text-danger"></span></div>
+    </div>
+    <div class="form-check form-switch mt-3"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label"></label></div>
+</section>

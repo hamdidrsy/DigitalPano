@@ -23,10 +23,10 @@
                 <a class="admin-nav-link @(currentController == "Dashboard" ? "active" : null)" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Gösterge paneli</a>
                 <a class="admin-nav-link @(currentController == "Announcements" ? "active" : null)" asp-area="Admin" asp-controller="Announcements" asp-action="Index">Duyurular</a>
                 <a class="admin-nav-link @(currentController == "Media" ? "active" : null)" asp-area="Admin" asp-controller="Media" asp-action="Index">Medya</a>
-                <span class="admin-nav-link disabled">Kayan yazılar</span>
+                <a class="admin-nav-link @(currentController == "TickerMessages" ? "active" : null)" asp-area="Admin" asp-controller="TickerMessages" asp-action="Index">Kayan yazılar</a>
                 <a class="admin-nav-link @(currentController == "Screens" ? "active" : null)" asp-area="Admin" asp-controller="Screens" asp-action="Index">Ekranlar</a>
                 <span class="admin-nav-link disabled">Acil duyuru</span>
-                <span class="admin-nav-link disabled">Kurum ayarları</span>
+                <a class="admin-nav-link @(currentController == "Settings" ? "active" : null)" asp-area="Admin" asp-controller="Settings" asp-action="Index">Kurum ayarları</a>
             </nav>
         </aside>
 

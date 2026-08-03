@@ -418,6 +418,48 @@
   max-width: 720px;
 }
 
+.ticker-form-panel {
+  max-width: 880px;
+}
+
+.ticker-text-cell {
+  max-width: 520px;
+  white-space: normal;
+}
+
+.settings-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.theme-color-row {
+  align-items: end;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto 1fr;
+}
+
+.theme-color-row .form-control-color {
+  height: 58px;
+  width: 76px;
+}
+
+.theme-preview {
+  background: linear-gradient(135deg, var(--preview-primary), var(--preview-secondary));
+  border-radius: .75rem;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 1100px) {
   .dashboard-grid {
     grid-template-columns: repeat(2, minmax(180px, 1fr));

@@ -33,7 +33,8 @@ public sealed class MediaController(
                 x.FileSize,
                 x.MediaType,
                 dateTimeService.ToLocalTime(x.CreatedAtUtc),
-                x.Announcements.Count))
+                x.Announcements.Count +
+                    (dbContext.InstitutionSettings.Any(s => s.LogoPath == x.RelativePath) ? 1 : 0)))
             .ToListAsync(cancellationToken);
 
         return View(new MediaListViewModel { Items = items });
@@ -140,9 +141,12 @@ public sealed class MediaController(
             return NotFound();
         }
 
-        if (media.Announcements.Count > 0)
+        bool isInstitutionLogo = await dbContext.InstitutionSettings.AnyAsync(
+            x => x.LogoPath == media.RelativePath,
+            cancellationToken);
+        if (media.Announcements.Count > 0 || isInstitutionLogo)
         {
-            TempData["ErrorMessage"] = "Bir duyuruda kullanılan medya dosyası silinemez.";
+            TempData["ErrorMessage"] = "Duyuru veya kurum logosunda kullanılan medya dosyası silinemez.";
             return RedirectToAction(nameof(Index));
         }
 

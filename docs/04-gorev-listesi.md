@@ -66,11 +66,11 @@
 
 ## Aşama 6 — Kayan yazı ve kurum ayarları
 
-- [ ] Kayan yazı CRUD ve tarih filtrelemesini oluştur.
-- [ ] Alt bant animasyonunu uygula.
-- [ ] Kurum adı, logo ve renk ayarlarını oluştur.
-- [ ] Tema değerlerini pano CSS değişkenlerine bağla.
-- [ ] Ayar ve kayan yazı testlerini yaz.
+- [x] Kayan yazı CRUD ve tarih filtrelemesini oluştur.
+- [x] Alt bant animasyonunu uygula.
+- [x] Kurum adı, logo ve renk ayarlarını oluştur.
+- [x] Tema değerlerini pano CSS değişkenlerine bağla.
+- [x] Ayar ve kayan yazı testlerini yaz.
 
 ## Aşama 7 — Gerçek zamanlı çalışma
 

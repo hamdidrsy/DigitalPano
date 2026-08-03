@@ -35,6 +35,19 @@ public sealed class PanoController(
             .AsNoTracking()
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(cancellationToken);
+        int? logoMediaId = institution?.LogoPath is null
+            ? null
+            : await dbContext.Media
+                .Where(x => x.RelativePath == institution.LogoPath && x.MediaType == MediaType.Image)
+                .Select(x => (int?)x.Id)
+                .FirstOrDefaultAsync(cancellationToken);
+        List<string> tickerMessages = await dbContext.TickerMessages
+            .AsNoTracking()
+            .Where(x => x.IsActive && x.StartDateUtc <= utcNow && x.EndDateUtc >= utcNow)
+            .OrderBy(x => x.SortOrder)
+            .ThenBy(x => x.Id)
+            .Select(x => x.Text)
+            .ToListAsync(cancellationToken);
         List<Announcement> announcements = await dbContext.Announcements
             .AsNoTracking()
             .Include(x => x.Media)
@@ -52,11 +65,13 @@ public sealed class PanoController(
         {
             InstitutionName = institution?.InstitutionName ?? "DigitalPano",
             LogoPath = institution?.LogoPath,
+            LogoMediaId = logoMediaId,
             PrimaryColor = institution?.PrimaryColor ?? "#0D6EFD",
             SecondaryColor = institution?.SecondaryColor ?? "#6C757D",
             ScreenName = screen.Name,
             ScreenSlug = screen.Slug,
             DeviceKey = screen.DeviceKey,
+            TickerMessages = tickerMessages,
             Items = announcements.Select(x => new PanoContentItemViewModel(
                 x.Id,
                 x.Title,
@@ -108,12 +123,13 @@ public sealed class PanoController(
             .AsNoTracking()
             .SingleOrDefaultAsync(x =>
                 x.Id == mediaId &&
-                x.Announcements.Any(a =>
-                    a.IsActive &&
-                    !a.IsEmergency &&
-                    a.StartDateUtc <= utcNow &&
-                    a.EndDateUtc >= utcNow &&
-                    a.AnnouncementScreens.Any(s => s.ScreenId == screen.Id)),
+                (x.Announcements.Any(a =>
+                     a.IsActive &&
+                     !a.IsEmergency &&
+                     a.StartDateUtc <= utcNow &&
+                     a.EndDateUtc >= utcNow &&
+                     a.AnnouncementScreens.Any(s => s.ScreenId == screen.Id)) ||
+                 dbContext.InstitutionSettings.Any(s => s.LogoPath == x.RelativePath)),
                 cancellationToken);
         if (media is null)
         {

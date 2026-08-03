@@ -1,0 +1,5 @@
+@model TickerMessageFormViewModel
+@{ ViewData["Title"] = "Kayan Yazı Düzenle"; }
+<div class="page-heading"><div><p class="admin-eyebrow">Kayan yazılar</p><h1>Kayan yazıyı düzenle</h1></div></div>
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post"><input asp-for="Id" type="hidden" /><partial name="_TickerForm" model="Model" /><div class="form-actions justify-content-start"><button class="btn btn-primary" type="submit">Değişiklikleri kaydet</button><a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a></div></form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

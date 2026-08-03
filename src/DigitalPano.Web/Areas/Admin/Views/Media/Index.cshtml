@@ -51,7 +51,7 @@ else
                 <div class="media-card-body">
                     <strong title="@item.OriginalFileName">@item.OriginalFileName</strong>
                     <span>@FormatBytes(item.FileSize) · @item.CreatedAt.ToString("dd.MM.yyyy HH:mm")</span>
-                    <span>@(item.UsageCount == 0 ? "Kullanılmıyor" : $"{item.UsageCount} duyuruda kullanılıyor")</span>
+                    <span>@(item.UsageCount == 0 ? "Kullanılmıyor" : $"{item.UsageCount} yerde kullanılıyor")</span>
                     <div class="mt-3 d-flex gap-2">
                         <a asp-action="Preview" asp-route-id="@item.Id" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">Ön izle</a>
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger @(item.UsageCount > 0 ? "disabled" : null)" aria-disabled="@(item.UsageCount > 0)">Sil</a>

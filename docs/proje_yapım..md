@@ -387,6 +387,8 @@ Gerekirse kayan yazılar da ekranlarla çoktan çoğa ilişkilendirilir.
 
 ## 13. Aşama 6 — Pano ekranı ve slider
 
+> **Durum: Tamamlandı — 4 Ağustos 2026.** Bu bölüm görev listesindeki Aşama 5 kapsamında tamamlandı. Tam ekran pano, tarih/ekran filtresi, metin-görsel-video slider'ı, video bitiş geçişi, canlı saat ve boş yayın görünümü oluşturuldu. Ayrıntılar için [`09-asama-5-ozeti.md`](09-asama-5-ozeti.md) belgesine bakınız.
+
 ### Yapılacak işler
 
 1. Menü ve yönetim bağlantısı içermeyen tam ekran pano görünümü hazırlanır.
@@ -421,6 +423,8 @@ EndDate >= şu an
 ---
 
 ## 14. Aşama 7 — Kayan yazı ve kurum ayarları
+
+> **Durum: Tamamlandı — 4 Ağustos 2026.** Bu bölüm görev listesindeki Aşama 6 kapsamında tamamlandı. Tarih planlamalı kayan yazı CRUD, animasyonlu pano alt bandı, kurum adı/şehir/logo/tema ayarları, medya kullanım koruması ve testler oluşturuldu. Ayrıntılar için [`10-asama-6-ozeti.md`](10-asama-6-ozeti.md) belgesine bakınız.
 
 ### Yapılacak işler
 

@@ -1,0 +1,38 @@
+@model TickerMessageListViewModel
+@{
+    ViewData["Title"] = "Kayan Yazılar";
+}
+<div class="page-heading">
+    <div><p class="admin-eyebrow">Alt duyuru bandı</p><h1>Kayan yazılar</h1><p class="text-secondary mb-0">Panonun alt kısmında gösterilecek planlı mesajlar.</p></div>
+    <a asp-action="Create" class="btn btn-primary">Yeni kayan yazı</a>
+</div>
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="status">@successMessage</div>
+}
+<div class="content-panel table-responsive">
+    @if (Model.Items.Count == 0)
+    {
+        <div class="empty-state"><h2>Henüz kayan yazı yok</h2><p>İlk alt bant mesajını oluşturabilirsiniz.</p></div>
+    }
+    else
+    {
+        <table class="table align-middle admin-table">
+            <thead><tr><th>Mesaj</th><th>Yayın aralığı</th><th>Sıra</th><th>Durum</th><th class="text-end">İşlemler</th></tr></thead>
+            <tbody>
+                @foreach (TickerMessageListItemViewModel item in Model.Items)
+                {
+                    string statusText = item.Status switch { TickerMessageStatus.Active => "Yayında", TickerMessageStatus.Scheduled => "Planlanmış", TickerMessageStatus.Expired => "Süresi dolmuş", _ => "Pasif" };
+                    string statusClass = item.Status switch { TickerMessageStatus.Active => "status-active", TickerMessageStatus.Scheduled => "status-scheduled", TickerMessageStatus.Expired => "status-expired", _ => "status-inactive" };
+                    <tr>
+                        <td class="ticker-text-cell">@item.Text</td>
+                        <td>@item.StartDate.ToString("dd.MM.yyyy HH:mm")<span class="d-block text-secondary">@item.EndDate.ToString("dd.MM.yyyy HH:mm")</span></td>
+                        <td>@item.SortOrder</td>
+                        <td><span class="status-badge @statusClass">@statusText</span></td>
+                        <td class="text-end text-nowrap"><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Düzenle</a> <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Sil</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

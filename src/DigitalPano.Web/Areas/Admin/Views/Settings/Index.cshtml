@@ -1,0 +1,40 @@
+@model InstitutionSettingsViewModel
+@{
+    ViewData["Title"] = "Kurum Ayarları";
+}
+<div class="page-heading">
+    <div><p class="admin-eyebrow">Görsel kimlik</p><h1>Kurum ayarları</h1><p class="text-secondary mb-0">Pano başlığını, logosunu ve tema renklerini düzenleyin.</p></div>
+</div>
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="status">@successMessage</div>
+}
+<form asp-action="Index" method="post">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    <div class="settings-grid">
+        <section class="content-panel form-section">
+            <h2>Kurum bilgileri</h2>
+            <div class="mb-3"><label asp-for="InstitutionName" class="form-label"></label><input asp-for="InstitutionName" class="form-control" maxlength="200" /><span asp-validation-for="InstitutionName" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="City" class="form-label"></label><input asp-for="City" class="form-control" maxlength="100" /><span asp-validation-for="City" class="text-danger"></span></div>
+            <div><label asp-for="LogoMediaId" class="form-label"></label><select asp-for="LogoMediaId" class="form-select"><option value="">Logo kullanma</option>@foreach (LogoOptionViewModel logo in Model.LogoOptions){<option value="@logo.Id">@logo.OriginalFileName</option>}</select><span asp-validation-for="LogoMediaId" class="text-danger"></span><a asp-area="Admin" asp-controller="Media" asp-action="Upload" target="_blank" rel="noopener" class="small">Yeni logo görseli yükle</a></div>
+        </section>
+        <section class="content-panel form-section">
+            <h2>Tema renkleri</h2>
+            <div class="theme-color-row"><input asp-for="PrimaryColor" type="color" class="form-control form-control-color" /><div><label asp-for="PrimaryColor" class="form-label"></label><input asp-for="PrimaryColor" class="form-control color-text-input" maxlength="7" /></div></div><span asp-validation-for="PrimaryColor" class="text-danger"></span>
+            <div class="theme-color-row mt-3"><input asp-for="SecondaryColor" type="color" class="form-control form-control-color" /><div><label asp-for="SecondaryColor" class="form-label"></label><input asp-for="SecondaryColor" class="form-control color-text-input" maxlength="7" /></div></div><span asp-validation-for="SecondaryColor" class="text-danger"></span>
+            <div class="theme-preview mt-4" style="--preview-primary:@Model.PrimaryColor;--preview-secondary:@Model.SecondaryColor"><strong>@Model.InstitutionName</strong><span>Pano tema ön izlemesi</span></div>
+        </section>
+    </div>
+    <div class="form-actions"><button type="submit" class="btn btn-primary">Ayarları kaydet</button></div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.querySelectorAll('.theme-color-row').forEach(row => {
+            const color = row.querySelector('input[type=color]');
+            const text = row.querySelector('input[type=text]');
+            color.addEventListener('input', () => text.value = color.value.toUpperCase());
+            text.addEventListener('input', () => { if (/^#[0-9a-f]{6}$/i.test(text.value)) color.value = text.value; });
+        });
+    </script>
+}
