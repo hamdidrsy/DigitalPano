@@ -359,6 +359,8 @@ Gerekirse kayan yazılar da ekranlarla çoktan çoğa ilişkilendirilir.
 
 ## 12. Aşama 5 — Ekran yönetimi
 
+> **Durum: Tamamlandı — 4 Ağustos 2026.** Ekran CRUD, Türkçe uyumlu benzersiz slug, 256 bit cihaz anahtarı, güvenli pano URL'si, bağlantı heartbeat'i, ekrana/tarihe özel yayın sorgusu, 16:9 metin-görsel-video slider'ı, canlı saat ve boş yayın görünümü oluşturuldu. Ayrıntılar için [`09-asama-5-ozeti.md`](09-asama-5-ozeti.md) belgesine bakınız.
+
 ### Yapılacak işler
 
 1. Ekran ekleme, düzenleme, etkinleştirme ve devre dışı bırakma sayfaları hazırlanır.

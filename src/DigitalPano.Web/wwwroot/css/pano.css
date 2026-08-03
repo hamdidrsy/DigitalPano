@@ -1,0 +1,216 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: #07111f;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  color: #f8fafc;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.pano-shell {
+  background: radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--pano-primary) 22%, #07111f), #07111f 45%);
+  display: grid;
+  grid-template-rows: 11vh minmax(0, 1fr) 6vh;
+  height: 100vh;
+  width: 100vw;
+}
+
+.pano-header {
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+  display: flex;
+  justify-content: space-between;
+  padding: 1.2vh 2.2vw;
+}
+
+.institution-brand {
+  align-items: center;
+  display: flex;
+  gap: 1vw;
+}
+
+.institution-mark,
+.fallback-mark {
+  align-items: center;
+  background: var(--pano-primary);
+  border-radius: 1.1vw;
+  display: flex;
+  font-size: 1.6vw;
+  font-weight: 800;
+  height: 4.2vw;
+  justify-content: center;
+  width: 4.2vw;
+}
+
+.institution-brand h1 {
+  font-size: 1.7vw;
+  margin: 0;
+}
+
+.institution-brand span {
+  color: #94a3b8;
+  font-size: .9vw;
+}
+
+.pano-clock {
+  text-align: right;
+}
+
+.pano-clock strong {
+  display: block;
+  font-size: 2.4vw;
+  line-height: 1;
+}
+
+.pano-clock span {
+  color: #cbd5e1;
+  font-size: .9vw;
+}
+
+.pano-content {
+  display: grid;
+  gap: 1.2vw;
+  grid-template-columns: minmax(0, 4fr) minmax(240px, 1fr);
+  min-height: 0;
+  padding: 1.2vw;
+}
+
+.slider-stage {
+  background: #0f1d2f;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 1.2vw;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.pano-slide {
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.pano-slide[hidden] {
+  display: none;
+}
+
+.pano-slide img,
+.pano-slide video {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.slide-copy {
+  background: linear-gradient(transparent, rgba(3, 8, 18, .95));
+  bottom: 0;
+  left: 0;
+  padding: 7vh 3vw 3vh;
+  position: absolute;
+  right: 0;
+}
+
+.slide-copy.text-only {
+  align-items: center;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--pano-primary) 42%, #0f172a), #0f172a);
+  display: flex;
+  flex-direction: column;
+  inset: 0;
+  justify-content: center;
+  padding: 5vw;
+  text-align: center;
+}
+
+.slide-copy > span {
+  color: #bfdbfe;
+  font-size: .8vw;
+  font-weight: 800;
+  letter-spacing: .2em;
+}
+
+.slide-copy h2 {
+  font-size: clamp(32px, 3.5vw, 74px);
+  line-height: 1.05;
+  margin: .7vh 0 1vh;
+}
+
+.slide-copy p {
+  color: #e2e8f0;
+  font-size: clamp(18px, 1.45vw, 32px);
+  line-height: 1.4;
+  margin: 0;
+  max-width: 90%;
+  white-space: pre-line;
+}
+
+.pano-sidebar {
+  display: grid;
+  gap: 1.2vw;
+  grid-template-rows: 1fr 1fr;
+}
+
+.pano-sidebar section {
+  background: rgba(15, 29, 47, .9);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 1.2vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2vw;
+}
+
+.sidebar-label {
+  color: #60a5fa;
+  font-size: .7vw;
+  font-weight: 800;
+  letter-spacing: .18em;
+}
+
+.pano-sidebar strong {
+  font-size: 1.7vw;
+  margin: .6vh 0;
+}
+
+.pano-sidebar p {
+  color: #94a3b8;
+  font-size: .9vw;
+  margin: 0;
+}
+
+.pano-fallback {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  text-align: center;
+}
+
+.pano-fallback h2 {
+  font-size: 3vw;
+  margin: 2vh 0 .5vh;
+}
+
+.pano-fallback p {
+  color: #94a3b8;
+  font-size: 1.2vw;
+}
+
+.pano-footer {
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  color: #94a3b8;
+  display: flex;
+  font-size: .8vw;
+  justify-content: space-between;
+  padding: 0 2.2vw;
+}

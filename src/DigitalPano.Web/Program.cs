@@ -66,6 +66,8 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IAnnouncementStatusService, AnnouncementStatusService>();
 builder.Services.AddSingleton<IInstitutionDateTimeService, InstitutionDateTimeService>();
 builder.Services.AddSingleton<IMediaStorageService, LocalMediaStorageService>();
+builder.Services.AddSingleton<ISlugService, SlugService>();
+builder.Services.AddSingleton<IScreenKeyService, ScreenKeyService>();
 
 WebApplication app = builder.Build();
 
@@ -96,7 +98,7 @@ app.MapControllerRoute(
 await using (AsyncServiceScope scope = app.Services.CreateAsyncScope())
 {
     DatabaseInitializer initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
-    await initializer.SeedAdminAsync();
+    await initializer.InitializeAsync();
 }
 
 app.Run();

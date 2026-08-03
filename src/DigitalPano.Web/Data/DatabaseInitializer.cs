@@ -1,20 +1,46 @@
 using DigitalPano.Web.Data.Entities;
 using DigitalPano.Web.Options;
+using DigitalPano.Web.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace DigitalPano.Web.Data;
 
 public sealed class DatabaseInitializer(
+    AppDbContext dbContext,
+    IScreenKeyService screenKeyService,
+    IHostEnvironment hostEnvironment,
     UserManager<AppUser> userManager,
     IOptions<SeedAdminOptions> options,
     ILogger<DatabaseInitializer> logger)
 {
+    private const string DevelopmentScreenKey = "development-screen-key-change-before-production";
     private static readonly Action<ILogger, string, Exception?> AdminCreated =
         LoggerMessage.Define<string>(
             LogLevel.Information,
             new EventId(1001, nameof(AdminCreated)),
             "Başlangıç yönetici hesabı {Email} için oluşturuldu.");
+
+    public async Task InitializeAsync(CancellationToken cancellationToken = default)
+    {
+        List<Screen> screensWithDevelopmentKey = hostEnvironment.IsEnvironment("Testing")
+            ? []
+            : await dbContext.Screens
+                .Where(x => x.DeviceKey == DevelopmentScreenKey)
+                .ToListAsync(cancellationToken);
+        foreach (Screen screen in screensWithDevelopmentKey)
+        {
+            screen.DeviceKey = screenKeyService.Generate();
+        }
+
+        if (screensWithDevelopmentKey.Count > 0)
+        {
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        await SeedAdminAsync(cancellationToken);
+    }
 
     public async Task SeedAdminAsync(CancellationToken cancellationToken = default)
     {

@@ -1,0 +1,83 @@
+@model ScreenListViewModel
+@{
+    ViewData["Title"] = "Ekranlar";
+}
+
+<div class="page-heading">
+    <div>
+        <p class="admin-eyebrow">Cihaz yönetimi</p>
+        <h1>Ekranlar</h1>
+        <p class="text-secondary mb-0">Televizyon adreslerini ve bağlantı durumlarını yönetin.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Yeni ekran</a>
+</div>
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="status">@successMessage</div>
+}
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+<div class="content-panel table-responsive">
+    <table class="table align-middle admin-table">
+        <thead>
+            <tr>
+                <th>Ekran</th>
+                <th>Bağlantı</th>
+                <th>Pano adresi</th>
+                <th>Duyurular</th>
+                <th class="text-end">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ScreenListItemViewModel item in Model.Items)
+            {
+                string? panoUrl = Url.Action("Index", "Pano", new { area = "", slug = item.Slug, key = item.DeviceKey }, Context.Request.Scheme);
+                <tr>
+                    <td>
+                        <strong class="d-block">@item.Name</strong>
+                        <span class="text-secondary">@(item.Location ?? "Konum belirtilmedi") · /@item.Slug</span>
+                        @if (!item.IsActive)
+                        {
+                            <span class="status-badge status-inactive">Pasif</span>
+                        }
+                    </td>
+                    <td>
+                        <span class="status-badge @(item.IsOnline ? "status-active" : "status-inactive")">@(item.IsOnline ? "Çevrimiçi" : "Çevrimdışı")</span>
+                        <span class="d-block text-secondary small">@(item.LastConnectionDate?.ToString("dd.MM.yyyy HH:mm") ?? "Henüz bağlanmadı")</span>
+                    </td>
+                    <td class="screen-url-cell">
+                        <code>@panoUrl</code>
+                        <div class="mt-2 d-flex gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary copy-url" data-url="@panoUrl">Kopyala</button>
+                            <a href="@panoUrl" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">Aç</a>
+                        </div>
+                    </td>
+                    <td>@item.AnnouncementCount</td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+                        <form asp-action="RegenerateKey" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Cihaz anahtarı değişince eski pano adresi çalışmaz. Devam edilsin mi?');">
+                            <button type="submit" class="btn btn-sm btn-outline-warning">Anahtarı yenile</button>
+                        </form>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.copy-url').forEach(button => {
+            button.addEventListener('click', async () => {
+                await navigator.clipboard.writeText(button.dataset.url);
+                button.textContent = 'Kopyalandı';
+                setTimeout(() => button.textContent = 'Kopyala', 1500);
+            });
+        });
+    </script>
+}

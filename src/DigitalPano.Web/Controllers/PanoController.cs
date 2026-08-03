@@ -1,0 +1,147 @@
+using DigitalPano.Web.Data;
+using DigitalPano.Web.Data.Entities;
+using DigitalPano.Web.Models.Pano;
+using DigitalPano.Web.Services;
+using DigitalPano.Web.Services.Media;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MediaEntity = DigitalPano.Web.Data.Entities.Media;
+
+namespace DigitalPano.Web.Controllers;
+
+[AllowAnonymous]
+public sealed class PanoController(
+    AppDbContext dbContext,
+    IScreenKeyService screenKeyService,
+    IMediaStorageService mediaStorageService,
+    TimeProvider timeProvider) : Controller
+{
+    [HttpGet("pano/{slug}")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    public async Task<IActionResult> Index(
+        string slug,
+        [FromQuery] string? key,
+        CancellationToken cancellationToken)
+    {
+        Screen? screen = await GetAuthorizedScreenAsync(slug, key, cancellationToken);
+        if (screen is null)
+        {
+            return NotFound();
+        }
+
+        DateTime utcNow = timeProvider.GetUtcNow().UtcDateTime;
+        InstitutionSetting? institution = await dbContext.InstitutionSettings
+            .AsNoTracking()
+            .OrderBy(x => x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+        List<Announcement> announcements = await dbContext.Announcements
+            .AsNoTracking()
+            .Include(x => x.Media)
+            .Where(x => x.IsActive &&
+                        !x.IsEmergency &&
+                        x.StartDateUtc <= utcNow &&
+                        x.EndDateUtc >= utcNow &&
+                        x.AnnouncementScreens.Any(s => s.ScreenId == screen.Id) &&
+                        (x.ContentType == AnnouncementContentType.Text || x.MediaId != null))
+            .OrderBy(x => x.SortOrder)
+            .ThenBy(x => x.Id)
+            .ToListAsync(cancellationToken);
+
+        var model = new PanoViewModel
+        {
+            InstitutionName = institution?.InstitutionName ?? "DigitalPano",
+            LogoPath = institution?.LogoPath,
+            PrimaryColor = institution?.PrimaryColor ?? "#0D6EFD",
+            SecondaryColor = institution?.SecondaryColor ?? "#6C757D",
+            ScreenName = screen.Name,
+            ScreenSlug = screen.Slug,
+            DeviceKey = screen.DeviceKey,
+            Items = announcements.Select(x => new PanoContentItemViewModel(
+                x.Id,
+                x.Title,
+                x.Description,
+                x.ContentType,
+                x.MediaId,
+                x.Media?.MimeType,
+                x.DisplayDurationSeconds))
+                .ToArray()
+        };
+
+        return View(model);
+    }
+
+    [HttpPost("pano/{slug}/heartbeat")]
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> Heartbeat(
+        string slug,
+        [FromQuery] string? key,
+        CancellationToken cancellationToken)
+    {
+        Screen? screen = await GetAuthorizedScreenAsync(slug, key, cancellationToken, track: true);
+        if (screen is null)
+        {
+            return NotFound();
+        }
+
+        screen.LastConnectionDateUtc = timeProvider.GetUtcNow().UtcDateTime;
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return NoContent();
+    }
+
+    [HttpGet("pano/{slug}/medya/{mediaId:int}")]
+    [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Client)]
+    public async Task<IActionResult> Media(
+        string slug,
+        int mediaId,
+        [FromQuery] string? key,
+        CancellationToken cancellationToken)
+    {
+        Screen? screen = await GetAuthorizedScreenAsync(slug, key, cancellationToken);
+        if (screen is null)
+        {
+            return NotFound();
+        }
+
+        DateTime utcNow = timeProvider.GetUtcNow().UtcDateTime;
+        MediaEntity? media = await dbContext.Media
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x =>
+                x.Id == mediaId &&
+                x.Announcements.Any(a =>
+                    a.IsActive &&
+                    !a.IsEmergency &&
+                    a.StartDateUtc <= utcNow &&
+                    a.EndDateUtc >= utcNow &&
+                    a.AnnouncementScreens.Any(s => s.ScreenId == screen.Id)),
+                cancellationToken);
+        if (media is null)
+        {
+            return NotFound();
+        }
+
+        Stream? stream = await mediaStorageService.OpenReadAsync(media.RelativePath, cancellationToken);
+        if (stream is null)
+        {
+            return NotFound();
+        }
+
+        Response.Headers.XContentTypeOptions = "nosniff";
+        return File(stream, media.MimeType, enableRangeProcessing: media.MediaType == MediaType.Video);
+    }
+
+    private async Task<Screen?> GetAuthorizedScreenAsync(
+        string slug,
+        string? suppliedKey,
+        CancellationToken cancellationToken,
+        bool track = false)
+    {
+        IQueryable<Screen> query = track ? dbContext.Screens : dbContext.Screens.AsNoTracking();
+        Screen? screen = await query.SingleOrDefaultAsync(
+            x => x.Slug == slug && x.IsActive,
+            cancellationToken);
+        return screen is not null && screenKeyService.IsValid(screen.DeviceKey, suppliedKey)
+            ? screen
+            : null;
+    }
+}

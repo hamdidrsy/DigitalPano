@@ -403,6 +403,21 @@
   margin-top: .5rem;
 }
 
+.screen-url-cell {
+  max-width: 380px;
+}
+
+.screen-url-cell code {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.screen-form-panel {
+  max-width: 720px;
+}
+
 @media (max-width: 1100px) {
   .dashboard-grid {
     grid-template-columns: repeat(2, minmax(180px, 1fr));

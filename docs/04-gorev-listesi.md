@@ -54,15 +54,15 @@
 
 ## Aşama 5 — Ekranlar ve temel pano
 
-- [ ] Ekran CRUD ve benzersiz slug üretimini oluştur.
-- [ ] DeviceKey üretimini ekle.
-- [ ] `/pano/{slug}` rotasını ve yayın sorgusunu oluştur.
-- [ ] Temel 16:9 pano yerleşimini uygula.
-- [ ] Metin, görsel ve video göstericisini oluştur.
-- [ ] Slider zamanlamasını ve video bitiş geçişini uygula.
-- [ ] Canlı tarih ve saat ekle.
-- [ ] Boş yayın yedek görünümünü ekle.
-- [ ] Ekrana özel yayın testlerini yaz.
+- [x] Ekran CRUD ve benzersiz slug üretimini oluştur.
+- [x] DeviceKey üretimini ekle.
+- [x] `/pano/{slug}` rotasını ve yayın sorgusunu oluştur.
+- [x] Temel 16:9 pano yerleşimini uygula.
+- [x] Metin, görsel ve video göstericisini oluştur.
+- [x] Slider zamanlamasını ve video bitiş geçişini uygula.
+- [x] Canlı tarih ve saat ekle.
+- [x] Boş yayın yedek görünümünü ekle.
+- [x] Ekrana özel yayın testlerini yaz.
 
 ## Aşama 6 — Kayan yazı ve kurum ayarları
 

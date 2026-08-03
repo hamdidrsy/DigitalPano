@@ -1,0 +1,102 @@
+@model DigitalPano.Web.Models.Pano.PanoViewModel
+@using DigitalPano.Web.Data.Entities
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>@Model.ScreenName - @Model.InstitutionName</title>
+    <link rel="stylesheet" href="~/css/pano.css" asp-append-version="true" />
+    <style>
+        :root {
+            --pano-primary: @Model.PrimaryColor;
+            --pano-secondary: @Model.SecondaryColor;
+        }
+    </style>
+</head>
+<body>
+    <main class="pano-shell"
+          data-pano-root
+          data-heartbeat-url="@Url.Action("Heartbeat", "Pano", new { slug = Model.ScreenSlug, key = Model.DeviceKey })">
+        <header class="pano-header">
+            <div class="institution-brand">
+                <div class="institution-mark">DP</div>
+                <div>
+                    <h1>@Model.InstitutionName</h1>
+                    <span>@Model.ScreenName</span>
+                </div>
+            </div>
+            <div class="pano-clock" aria-live="off">
+                <strong data-pano-time>--:--</strong>
+                <span data-pano-date>--.--.----</span>
+            </div>
+        </header>
+
+        <section class="pano-content">
+            <div class="slider-stage" data-slider>
+                @if (Model.Items.Count == 0)
+                {
+                    <article class="pano-fallback">
+                        <div class="fallback-mark">DP</div>
+                        <h2>Yayın bekleniyor</h2>
+                        <p>Bu ekran için şu anda aktif bir duyuru bulunmuyor.</p>
+                    </article>
+                }
+                else
+                {
+                    @foreach (var item in Model.Items)
+                    {
+                        string? mediaUrl = item.MediaId.HasValue
+                            ? Url.Action("Media", "Pano", new { slug = Model.ScreenSlug, mediaId = item.MediaId, key = Model.DeviceKey })
+                            : null;
+                        <article class="pano-slide"
+                                 data-slide
+                                 data-duration="@(item.DisplayDurationSeconds * 1000)"
+                                 data-content-type="@item.ContentType.ToString().ToLowerInvariant()"
+                                 hidden>
+                            @if (item.ContentType == AnnouncementContentType.Image && mediaUrl is not null)
+                            {
+                                <img src="@mediaUrl" alt="" />
+                            }
+                            else if (item.ContentType == AnnouncementContentType.Video && mediaUrl is not null)
+                            {
+                                <video muted playsinline preload="auto">
+                                    <source src="@mediaUrl" type="@item.MediaMimeType" />
+                                </video>
+                            }
+                            <div class="slide-copy @(item.ContentType == AnnouncementContentType.Text ? "text-only" : null)">
+                                <span>DUYURU</span>
+                                <h2>@item.Title</h2>
+                                <p>@item.Description</p>
+                            </div>
+                        </article>
+                    }
+                }
+            </div>
+
+            <aside class="pano-sidebar">
+                <section>
+                    <span class="sidebar-label">BUGÜN</span>
+                    <strong data-pano-day>—</strong>
+                    <p>Güncel kurum duyuruları</p>
+                </section>
+                <section>
+                    <span class="sidebar-label">YAYIN</span>
+                    <strong>@Model.Items.Count içerik</strong>
+                    <p>Otomatik olarak güncellenir</p>
+                </section>
+            </aside>
+        </section>
+
+        <footer class="pano-footer">
+            <span>@Model.InstitutionName</span>
+            <span>DigitalPano</span>
+        </footer>
+    </main>
+    <script src="~/js/pano.js" asp-append-version="true"></script>
+</body>
+</html>
