@@ -1,0 +1,30 @@
+## Build outputs
+[Bb]in/
+[Oo]bj/
+artifacts/
+TestResults/
+
+## IDE and user settings
+.vs/
+.vscode/
+*.user
+*.suo
+
+## Local tooling
+.dotnet-home/
+.tools/
+
+## Secrets and local configuration
+appsettings.Local.json
+secrets.json
+.env
+
+## Local databases and uploaded media
+*.mdf
+*.ldf
+src/DigitalPano.Web/App_Data/media/*
+!src/DigitalPano.Web/App_Data/media/.gitkeep
+
+## OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9A7931F9-1C6B-433C-9D7F-F43893C0544D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalPano.Web", "src\DigitalPano.Web\DigitalPano.Web.csproj", "{84381244-BFE4-4F58-8C0A-69205BFCB434}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{23BD08FC-9429-40E6-AE36-F45212CED721}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalPano.Tests", "tests\DigitalPano.Tests\DigitalPano.Tests.csproj", "{232E3895-F1CD-4514-819C-DE3893B4D66A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84381244-BFE4-4F58-8C0A-69205BFCB434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84381244-BFE4-4F58-8C0A-69205BFCB434}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84381244-BFE4-4F58-8C0A-69205BFCB434}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84381244-BFE4-4F58-8C0A-69205BFCB434}.Release|Any CPU.Build.0 = Release|Any CPU
+		{232E3895-F1CD-4514-819C-DE3893B4D66A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{232E3895-F1CD-4514-819C-DE3893B4D66A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{232E3895-F1CD-4514-819C-DE3893B4D66A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{232E3895-F1CD-4514-819C-DE3893B4D66A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{84381244-BFE4-4F58-8C0A-69205BFCB434} = {9A7931F9-1C6B-433C-9D7F-F43893C0544D}
+		{232E3895-F1CD-4514-819C-DE3893B4D66A} = {23BD08FC-9429-40E6-AE36-F45212CED721}
+	EndGlobalSection
+EndGlobal
