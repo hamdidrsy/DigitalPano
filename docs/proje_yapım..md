@@ -335,6 +335,8 @@ Gerekirse kayan yazılar da ekranlarla çoktan çoğa ilişkilendirilir.
 
 ## 11. Aşama 4 — Medya yönetimi
 
+> **Durum: Tamamlandı — 4 Ağustos 2026.** Güvenli yerel depolama, dosya imzası/MIME/uzantı/boyut doğrulaması, JPEG-PNG-WebP-MP4 yükleme, kontrollü ön izleme, kullanımda olan medyayı silme koruması, duyuruya medya bağlama ve testler oluşturuldu. Ayrıntılar için [`08-asama-4-ozeti.md`](08-asama-4-ozeti.md) belgesine bakınız.
+
 ### Yapılacak işler
 
 1. Görsel yükleme desteği eklenir.

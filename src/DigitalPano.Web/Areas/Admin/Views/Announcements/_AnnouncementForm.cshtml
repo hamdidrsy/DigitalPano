@@ -15,6 +15,29 @@
             <textarea asp-for="Description" class="form-control" rows="9" maxlength="4000"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
+        <div class="row g-3 mt-1">
+            <div class="col-md-5">
+                <label asp-for="ContentType" class="form-label"></label>
+                <select asp-for="ContentType" class="form-select" id="content-type">
+                    <option value="Text">Metin</option>
+                    <option value="Image">Görsel</option>
+                    <option value="Video">Video</option>
+                </select>
+            </div>
+            <div class="col-md-7" id="media-selection">
+                <label asp-for="MediaId" class="form-label"></label>
+                <select asp-for="MediaId" class="form-select">
+                    <option value="">Medya seçiniz</option>
+                    @foreach (MediaOptionViewModel media in Model.MediaOptions)
+                    {
+                        string typeName = media.MediaType == MediaType.Image ? "Görsel" : "Video";
+                        <option value="@media.Id">@media.OriginalFileName (@typeName)</option>
+                    }
+                </select>
+                <span asp-validation-for="MediaId" class="text-danger"></span>
+                <a asp-area="Admin" asp-controller="Media" asp-action="Upload" target="_blank" rel="noopener" class="small">Yeni medya yükle</a>
+            </div>
+        </div>
     </section>
 
     <div>
@@ -74,3 +97,16 @@
         </section>
     </div>
 </div>
+
+<script>
+    (() => {
+        const typeSelect = document.getElementById('content-type');
+        const mediaSelection = document.getElementById('media-selection');
+        if (!typeSelect || !mediaSelection) return;
+        const updateVisibility = () => {
+            mediaSelection.hidden = typeSelect.value === 'Text';
+        };
+        typeSelect.addEventListener('change', updateVisibility);
+        updateVisibility();
+    })();
+</script>

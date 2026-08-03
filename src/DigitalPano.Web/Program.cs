@@ -2,8 +2,10 @@ using DigitalPano.Web.Data;
 using DigitalPano.Web.Data.Entities;
 using DigitalPano.Web.Options;
 using DigitalPano.Web.Services;
+using DigitalPano.Web.Services.Media;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.Features;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -54,11 +56,16 @@ builder.Services.AddHsts(options =>
 
 builder.Services.Configure<SeedAdminOptions>(
     builder.Configuration.GetSection(SeedAdminOptions.SectionName));
+builder.Services.Configure<MediaStorageOptions>(
+    builder.Configuration.GetSection(MediaStorageOptions.SectionName));
+builder.Services.Configure<FormOptions>(options =>
+    options.MultipartBodyLengthLimit = 210L * 1024 * 1024);
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<DatabaseInitializer>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IAnnouncementStatusService, AnnouncementStatusService>();
 builder.Services.AddSingleton<IInstitutionDateTimeService, InstitutionDateTimeService>();
+builder.Services.AddSingleton<IMediaStorageService, LocalMediaStorageService>();
 
 WebApplication app = builder.Build();
 

@@ -46,11 +46,11 @@
 
 ## Aşama 4 — Medya
 
-- [ ] Dosya depolama servisi ve arayüzünü oluştur.
-- [ ] Güvenli görsel yükleme ve doğrulama ekle.
-- [ ] Güvenli MP4 yükleme ve doğrulama ekle.
-- [ ] Medya ön izleme ve silme kurallarını oluştur.
-- [ ] Boyut ve tür doğrulama testlerini yaz.
+- [x] Dosya depolama servisi ve arayüzünü oluştur.
+- [x] Güvenli görsel yükleme ve doğrulama ekle.
+- [x] Güvenli MP4 yükleme ve doğrulama ekle.
+- [x] Medya ön izleme ve silme kurallarını oluştur.
+- [x] Boyut ve tür doğrulama testlerini yaz.
 
 ## Aşama 5 — Ekranlar ve temel pano
 

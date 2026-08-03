@@ -29,7 +29,8 @@ public sealed class AnnouncementsController(
         IQueryable<Announcement> query = dbContext.Announcements
             .AsNoTracking()
             .Include(x => x.AnnouncementScreens)
-                .ThenInclude(x => x.Screen);
+                .ThenInclude(x => x.Screen)
+            .Include(x => x.Media);
 
         if (!string.IsNullOrWhiteSpace(search))
         {
@@ -68,6 +69,7 @@ public sealed class AnnouncementsController(
                 x.Id,
                 x.Title,
                 x.Description,
+                x.ContentType,
                 dateTimeService.ToLocalTime(x.StartDateUtc),
                 dateTimeService.ToLocalTime(x.EndDateUtc),
                 x.DisplayDurationSeconds,
@@ -88,7 +90,8 @@ public sealed class AnnouncementsController(
         {
             StartDate = RoundToNextFiveMinutes(localNow),
             EndDate = RoundToNextFiveMinutes(localNow).AddDays(1),
-            Screens = await GetScreenOptionsAsync(cancellationToken)
+            Screens = await GetScreenOptionsAsync(cancellationToken),
+            MediaOptions = await GetMediaOptionsAsync(cancellationToken)
         };
 
         return View(model);
@@ -100,9 +103,11 @@ public sealed class AnnouncementsController(
         CancellationToken cancellationToken)
     {
         List<int> validScreenIds = await ValidateAndGetScreenIdsAsync(model, cancellationToken);
+        int? validMediaId = await ValidateAndGetMediaIdAsync(model, cancellationToken);
         if (!ModelState.IsValid)
         {
             model.Screens = await GetScreenOptionsAsync(cancellationToken);
+            model.MediaOptions = await GetMediaOptionsAsync(cancellationToken);
             return View(model);
         }
 
@@ -110,7 +115,8 @@ public sealed class AnnouncementsController(
         {
             Title = model.Title.Trim(),
             Description = model.Description.Trim(),
-            ContentType = AnnouncementContentType.Text,
+            ContentType = model.ContentType,
+            MediaId = validMediaId,
             StartDateUtc = dateTimeService.ToUtc(model.StartDate),
             EndDateUtc = dateTimeService.ToUtc(model.EndDate),
             DisplayDurationSeconds = model.DisplayDurationSeconds,
@@ -140,6 +146,7 @@ public sealed class AnnouncementsController(
         Announcement? announcement = await dbContext.Announcements
             .AsNoTracking()
             .Include(x => x.AnnouncementScreens)
+            .Include(x => x.Media)
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (announcement is null)
         {
@@ -151,13 +158,16 @@ public sealed class AnnouncementsController(
             Id = announcement.Id,
             Title = announcement.Title,
             Description = announcement.Description,
+            ContentType = announcement.ContentType,
+            MediaId = announcement.MediaId,
             StartDate = dateTimeService.ToLocalTime(announcement.StartDateUtc),
             EndDate = dateTimeService.ToLocalTime(announcement.EndDateUtc),
             DisplayDurationSeconds = announcement.DisplayDurationSeconds,
             SortOrder = announcement.SortOrder,
             IsActive = announcement.IsActive,
             SelectedScreenIds = announcement.AnnouncementScreens.Select(x => x.ScreenId).ToList(),
-            Screens = await GetScreenOptionsAsync(cancellationToken)
+            Screens = await GetScreenOptionsAsync(cancellationToken),
+            MediaOptions = await GetMediaOptionsAsync(cancellationToken)
         };
 
         return View(model);
@@ -175,9 +185,11 @@ public sealed class AnnouncementsController(
         }
 
         List<int> validScreenIds = await ValidateAndGetScreenIdsAsync(model, cancellationToken);
+        int? validMediaId = await ValidateAndGetMediaIdAsync(model, cancellationToken);
         if (!ModelState.IsValid)
         {
             model.Screens = await GetScreenOptionsAsync(cancellationToken);
+            model.MediaOptions = await GetMediaOptionsAsync(cancellationToken);
             return View(model);
         }
 
@@ -191,6 +203,8 @@ public sealed class AnnouncementsController(
 
         announcement.Title = model.Title.Trim();
         announcement.Description = model.Description.Trim();
+        announcement.ContentType = model.ContentType;
+        announcement.MediaId = validMediaId;
         announcement.StartDateUtc = dateTimeService.ToUtc(model.StartDate);
         announcement.EndDateUtc = dateTimeService.ToUtc(model.EndDate);
         announcement.DisplayDurationSeconds = model.DisplayDurationSeconds;
@@ -230,6 +244,7 @@ public sealed class AnnouncementsController(
             .AsNoTracking()
             .Include(x => x.AnnouncementScreens)
                 .ThenInclude(x => x.Screen)
+            .Include(x => x.Media)
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (announcement is null)
         {
@@ -240,6 +255,9 @@ public sealed class AnnouncementsController(
             announcement.Id,
             announcement.Title,
             announcement.Description,
+            announcement.ContentType,
+            announcement.MediaId,
+            announcement.Media?.MimeType,
             dateTimeService.ToLocalTime(announcement.StartDateUtc),
             dateTimeService.ToLocalTime(announcement.EndDateUtc),
             announcement.DisplayDurationSeconds,
@@ -316,6 +334,45 @@ public sealed class AnnouncementsController(
         }
 
         return validIds;
+    }
+
+    private async Task<IReadOnlyList<MediaOptionViewModel>> GetMediaOptionsAsync(
+        CancellationToken cancellationToken)
+    {
+        return await dbContext.Media
+            .AsNoTracking()
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .Select(x => new MediaOptionViewModel(x.Id, x.OriginalFileName, x.MediaType))
+            .ToListAsync(cancellationToken);
+    }
+
+    private async Task<int?> ValidateAndGetMediaIdAsync(
+        AnnouncementFormViewModel model,
+        CancellationToken cancellationToken)
+    {
+        if (model.ContentType == AnnouncementContentType.Text)
+        {
+            return null;
+        }
+
+        if (model.MediaId is null)
+        {
+            return null;
+        }
+
+        MediaType expectedMediaType = model.ContentType == AnnouncementContentType.Image
+            ? MediaType.Image
+            : MediaType.Video;
+        bool mediaIsValid = await dbContext.Media.AnyAsync(
+            x => x.Id == model.MediaId && x.MediaType == expectedMediaType,
+            cancellationToken);
+        if (!mediaIsValid)
+        {
+            ModelState.AddModelError(nameof(model.MediaId), "Seçilen medya dosyası içerik türüyle uyuşmuyor.");
+            return null;
+        }
+
+        return model.MediaId;
     }
 
     private void AddActivityLog(string actionType, Announcement announcement, string description)

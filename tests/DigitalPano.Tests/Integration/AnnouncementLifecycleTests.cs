@@ -129,6 +129,60 @@ public sealed class AnnouncementLifecycleTests
         Assert.Empty(await dbContext.Announcements.ToListAsync());
     }
 
+    [Fact]
+    public async Task CreateRejectsMediaThatDoesNotMatchContentType()
+    {
+        await using AppDbContext dbContext = CreateContext();
+        dbContext.Screens.Add(new Screen
+        {
+            Id = 20,
+            Name = "Medya Test Ekranı",
+            Slug = "medya-test-ekrani",
+            DeviceKey = "media-test-device-key",
+            IsActive = true
+        });
+        dbContext.Media.Add(new Media
+        {
+            Id = 30,
+            OriginalFileName = "video.mp4",
+            StoredFileName = "stored-video.mp4",
+            RelativePath = "2026/08/stored-video.mp4",
+            MimeType = "video/mp4",
+            FileSize = 100,
+            MediaType = MediaType.Video
+        });
+        await dbContext.SaveChangesAsync();
+
+        var timeProvider = new FixedTimeProvider(
+            new DateTimeOffset(2026, 8, 4, 9, 0, 0, TimeSpan.Zero));
+        var httpContext = new DefaultHttpContext();
+        var controller = new AnnouncementsController(
+            dbContext,
+            new AnnouncementStatusService(timeProvider),
+            new InstitutionDateTimeService(),
+            timeProvider)
+        {
+            ControllerContext = new ControllerContext { HttpContext = httpContext },
+            TempData = new TempDataDictionary(httpContext, new TestTempDataProvider())
+        };
+        var model = new AnnouncementFormViewModel
+        {
+            Title = "Uyumsuz medya",
+            Description = "Video, görsel olarak seçilemez.",
+            ContentType = AnnouncementContentType.Image,
+            MediaId = 30,
+            StartDate = new DateTime(2026, 8, 5, 10, 0, 0),
+            EndDate = new DateTime(2026, 8, 5, 12, 0, 0),
+            SelectedScreenIds = [20]
+        };
+
+        IActionResult result = await controller.Create(model, CancellationToken.None);
+
+        Assert.IsType<ViewResult>(result);
+        Assert.False(controller.ModelState.IsValid);
+        Assert.Empty(await dbContext.Announcements.ToListAsync());
+    }
+
     private static AppDbContext CreateContext()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()

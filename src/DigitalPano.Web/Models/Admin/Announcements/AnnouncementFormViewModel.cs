@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DigitalPano.Web.Data.Entities;
 
 namespace DigitalPano.Web.Models.Admin.Announcements;
 
@@ -15,6 +16,13 @@ public sealed class AnnouncementFormViewModel : IValidatableObject
     [StringLength(4000, ErrorMessage = "Açıklama en fazla 4000 karakter olabilir.")]
     [Display(Name = "Açıklama")]
     public string Description { get; set; } = string.Empty;
+
+    [Display(Name = "İçerik türü")]
+    [EnumDataType(typeof(AnnouncementContentType), ErrorMessage = "Geçerli bir içerik türü seçiniz.")]
+    public AnnouncementContentType ContentType { get; set; } = AnnouncementContentType.Text;
+
+    [Display(Name = "Medya dosyası")]
+    public int? MediaId { get; set; }
 
     [Required(ErrorMessage = "Başlangıç tarihi zorunludur.")]
     [Display(Name = "Yayın başlangıcı")]
@@ -40,6 +48,8 @@ public sealed class AnnouncementFormViewModel : IValidatableObject
 
     public IReadOnlyList<ScreenOptionViewModel> Screens { get; set; } = [];
 
+    public IReadOnlyList<MediaOptionViewModel> MediaOptions { get; set; } = [];
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (EndDate <= StartDate)
@@ -54,6 +64,13 @@ public sealed class AnnouncementFormViewModel : IValidatableObject
             yield return new ValidationResult(
                 "En az bir ekran seçilmelidir.",
                 [nameof(SelectedScreenIds)]);
+        }
+
+        if (ContentType != AnnouncementContentType.Text && MediaId is null)
+        {
+            yield return new ValidationResult(
+                "Görsel veya video duyurusu için medya dosyası seçilmelidir.",
+                [nameof(MediaId)]);
         }
     }
 }

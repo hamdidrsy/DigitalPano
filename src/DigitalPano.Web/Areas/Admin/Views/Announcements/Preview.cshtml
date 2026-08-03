@@ -25,6 +25,16 @@
 <div class="preview-layout">
     <section class="announcement-preview" aria-label="Duyuru ön izlemesi">
         <span class="preview-label">DUYURU</span>
+        @if (Model.ContentType == AnnouncementContentType.Image && Model.MediaId.HasValue)
+        {
+            <img class="announcement-preview-media" src="@Url.Action("Preview", "Media", new { area = "Admin", id = Model.MediaId })" alt="" />
+        }
+        else if (Model.ContentType == AnnouncementContentType.Video && Model.MediaId.HasValue)
+        {
+            <video class="announcement-preview-media" controls muted preload="metadata">
+                <source src="@Url.Action("Preview", "Media", new { area = "Admin", id = Model.MediaId })" type="@Model.MediaMimeType" />
+            </video>
+        }
         <h2>@Model.Title</h2>
         <p>@Model.Description</p>
     </section>
@@ -39,6 +49,8 @@
             <dd>@Model.EndDate.ToString("dd.MM.yyyy HH:mm")</dd>
             <dt>Gösterim süresi</dt>
             <dd>@Model.DisplayDurationSeconds saniye</dd>
+            <dt>İçerik türü</dt>
+            <dd>@(Model.ContentType == AnnouncementContentType.Text ? "Metin" : Model.ContentType == AnnouncementContentType.Image ? "Görsel" : "Video")</dd>
             <dt>Ekranlar</dt>
             <dd>@string.Join(", ", Model.ScreenNames)</dd>
         </dl>

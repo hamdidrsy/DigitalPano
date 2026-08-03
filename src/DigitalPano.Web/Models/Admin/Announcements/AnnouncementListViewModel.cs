@@ -1,5 +1,7 @@
 namespace DigitalPano.Web.Models.Admin.Announcements;
 
+using DigitalPano.Web.Data.Entities;
+
 public sealed class AnnouncementListViewModel
 {
     public string? Search { get; init; }
@@ -17,6 +19,7 @@ public sealed record AnnouncementListItemViewModel(
     int Id,
     string Title,
     string Description,
+    AnnouncementContentType ContentType,
     DateTime StartDate,
     DateTime EndDate,
     int DisplayDurationSeconds,

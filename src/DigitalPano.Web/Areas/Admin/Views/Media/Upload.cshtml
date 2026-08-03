@@ -1,0 +1,37 @@
+@model MediaUploadViewModel
+@{
+    ViewData["Title"] = "Medya Yükle";
+}
+
+<div class="page-heading">
+    <div>
+        <p class="admin-eyebrow">Medya</p>
+        <h1>Dosya yükle</h1>
+        <p class="text-secondary mb-0">Dosya içeriği sunucuda doğrulanarak güvenli adla saklanır.</p>
+    </div>
+</div>
+
+<section class="content-panel upload-panel">
+    <form asp-action="Upload" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        <label asp-for="File" class="form-label"></label>
+        <input asp-for="File" type="file" class="form-control form-control-lg" accept="image/jpeg,image/png,image/webp,video/mp4" />
+        <span asp-validation-for="File" class="text-danger d-block mt-2"></span>
+        <div class="upload-rules">
+            <strong>Desteklenen dosyalar</strong>
+            <ul>
+                <li>JPEG, PNG veya WebP — en fazla 10 MB</li>
+                <li>MP4 video — en fazla 200 MB</li>
+                <li>Video uyumluluğu için H.264 kodlama önerilir</li>
+            </ul>
+        </div>
+        <div class="form-actions justify-content-start">
+            <button type="submit" class="btn btn-primary">Dosyayı yükle</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

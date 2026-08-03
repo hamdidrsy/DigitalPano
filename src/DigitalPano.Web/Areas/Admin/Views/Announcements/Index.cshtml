@@ -90,6 +90,7 @@
                     <tr>
                         <td>
                             <strong class="d-block">@item.Title</strong>
+                            <span class="content-type-label">@(item.ContentType == AnnouncementContentType.Text ? "Metin" : item.ContentType == AnnouncementContentType.Image ? "Görsel" : "Video")</span>
                             <span class="table-description">@item.Description</span>
                         </td>
                         <td>
