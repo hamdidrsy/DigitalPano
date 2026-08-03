@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DigitalPano Yönetimi</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-sidebar">
+            <a class="admin-logo" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                <span class="admin-logo-mark">DP</span>
+                <span>DigitalPano</span>
+            </a>
+
+            <nav aria-label="Yönetim menüsü">
+                <a class="admin-nav-link active" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Gösterge paneli</a>
+                <span class="admin-nav-link disabled">Duyurular</span>
+                <span class="admin-nav-link disabled">Medya</span>
+                <span class="admin-nav-link disabled">Kayan yazılar</span>
+                <span class="admin-nav-link disabled">Ekranlar</span>
+                <span class="admin-nav-link disabled">Acil duyuru</span>
+                <span class="admin-nav-link disabled">Kurum ayarları</span>
+            </nav>
+        </aside>
+
+        <div class="admin-main">
+            <header class="admin-header">
+                <div>
+                    <p class="admin-eyebrow">Yönetim paneli</p>
+                    <strong>@(User.Identity?.Name ?? "Yönetici")</strong>
+                </div>
+                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-outline-secondary">Çıkış yap</button>
+                </form>
+            </header>
+
+            <main class="admin-content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

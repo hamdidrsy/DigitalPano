@@ -26,12 +26,12 @@
 
 ## Aşama 2 — Kimlik ve yönetim kabuğu
 
-- [ ] Türkçe giriş ve çıkış akışını oluştur.
-- [ ] Admin alanını yetkilendirme ile koru.
-- [ ] Yönetim paneli ortak yerleşimini ve menüsünü oluştur.
-- [ ] Gösterge paneli özet kartlarını ekle.
-- [ ] Güvenli cookie, HTTPS ve üretim hata ayarlarını yapılandır.
-- [ ] Yetkili/yetkisiz erişim entegrasyon testlerini yaz.
+- [x] Türkçe giriş ve çıkış akışını oluştur.
+- [x] Admin alanını yetkilendirme ile koru.
+- [x] Yönetim paneli ortak yerleşimini ve menüsünü oluştur.
+- [x] Gösterge paneli özet kartlarını ekle.
+- [x] Güvenli cookie, HTTPS ve üretim hata ayarlarını yapılandır.
+- [x] Yetkili/yetkisiz erişim entegrasyon testlerini yaz.
 
 ## Aşama 3 — Duyuru yönetimi
 

@@ -1,0 +1,45 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Gösterge Paneli";
+}
+
+<div class="page-heading">
+    <div>
+        <p class="admin-eyebrow">Genel bakış</p>
+        <h1>Gösterge paneli</h1>
+        <p class="text-secondary mb-0">Yayınların ve pano ekranlarının güncel durumu.</p>
+    </div>
+</div>
+
+<section class="dashboard-grid" aria-label="Yayın özeti">
+    <article class="summary-card summary-card-primary">
+        <span class="summary-label">Yayındaki duyuru</span>
+        <strong>@Model.ActiveAnnouncementCount</strong>
+        <span>Şu anda gösteriliyor</span>
+    </article>
+    <article class="summary-card">
+        <span class="summary-label">Planlanmış</span>
+        <strong>@Model.ScheduledAnnouncementCount</strong>
+        <span>Yayın zamanını bekliyor</span>
+    </article>
+    <article class="summary-card">
+        <span class="summary-label">Süresi dolmuş</span>
+        <strong>@Model.ExpiredAnnouncementCount</strong>
+        <span>Yayın geçmişinde</span>
+    </article>
+    <article class="summary-card">
+        <span class="summary-label">Aktif ekran</span>
+        <strong>@Model.OnlineScreenCount / @Model.ActiveScreenCount</strong>
+        <span>Son 2 dakikada bağlı</span>
+    </article>
+    <article class="summary-card summary-card-danger">
+        <span class="summary-label">Acil yayın</span>
+        <strong>@Model.EmergencyAnnouncementCount</strong>
+        <span>Aktif tam ekran bildirim</span>
+    </article>
+</section>
+
+<section class="dashboard-panel">
+    <h2>Hızlı başlangıç</h2>
+    <p>Sonraki geliştirme aşamasında duyuru oluşturma ve yayın planlama işlemleri buradan yönetilebilecek.</p>
+</section>

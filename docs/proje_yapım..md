@@ -281,6 +281,8 @@ Gerekirse kayan yazılar da ekranlarla çoktan çoğa ilişkilendirilir.
 
 ## 9. Aşama 2 — Kimlik doğrulama ve yönetim paneli
 
+> **Durum: Tamamlandı — 3 Ağustos 2026.** Türkçe Identity giriş/çıkış akışı, korumalı Admin alanı, ortak yönetim yerleşimi, veri tabanı destekli dashboard, güvenli cookie/HSTS ayarları ve HTTP yetkilendirme testleri oluşturuldu. Ayrıntılar için [`06-asama-2-ozeti.md`](06-asama-2-ozeti.md) belgesine bakınız.
+
 ### Yapılacak işler
 
 1. ASP.NET Core Identity kurulumu tamamlanır.
