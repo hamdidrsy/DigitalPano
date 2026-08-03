@@ -1,0 +1,28 @@
+@model AnnouncementDeleteViewModel
+@{
+    ViewData["Title"] = "Duyuru Sil";
+}
+
+<div class="page-heading">
+    <div>
+        <p class="admin-eyebrow">Duyurular</p>
+        <h1>Duyuruyu sil</h1>
+    </div>
+</div>
+
+<section class="content-panel delete-panel">
+    <div class="alert alert-warning" role="alert">
+        Bu işlem geri alınamaz. Duyuru ekranlardan kaldırılacak, işlem kaydı korunacaktır.
+    </div>
+    <h2>@Model.Title</h2>
+    <dl>
+        <dt>Yayın aralığı</dt>
+        <dd>@Model.StartDate.ToString("dd.MM.yyyy HH:mm") – @Model.EndDate.ToString("dd.MM.yyyy HH:mm")</dd>
+        <dt>Ekranlar</dt>
+        <dd>@string.Join(", ", Model.ScreenNames)</dd>
+    </dl>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="form-actions justify-content-start">
+        <button type="submit" class="btn btn-danger">Evet, duyuruyu sil</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+    </form>
+</section>

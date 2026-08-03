@@ -1,0 +1,46 @@
+@model AnnouncementPreviewViewModel
+@{
+    ViewData["Title"] = "Duyuru Ön İzleme";
+    string statusText = Model.Status switch
+    {
+        AnnouncementStatus.Active => "Yayında",
+        AnnouncementStatus.Scheduled => "Planlanmış",
+        AnnouncementStatus.Expired => "Süresi dolmuş",
+        _ => "Pasif"
+    };
+}
+
+<div class="page-heading">
+    <div>
+        <p class="admin-eyebrow">Duyurular</p>
+        <h1>Ön izleme</h1>
+        <p class="text-secondary mb-0">Duyurunun pano alanındaki yaklaşık görünümü.</p>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Düzenle</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Listeye dön</a>
+    </div>
+</div>
+
+<div class="preview-layout">
+    <section class="announcement-preview" aria-label="Duyuru ön izlemesi">
+        <span class="preview-label">DUYURU</span>
+        <h2>@Model.Title</h2>
+        <p>@Model.Description</p>
+    </section>
+    <aside class="content-panel preview-details">
+        <h2>Yayın bilgileri</h2>
+        <dl>
+            <dt>Durum</dt>
+            <dd>@statusText</dd>
+            <dt>Başlangıç</dt>
+            <dd>@Model.StartDate.ToString("dd.MM.yyyy HH:mm")</dd>
+            <dt>Bitiş</dt>
+            <dd>@Model.EndDate.ToString("dd.MM.yyyy HH:mm")</dd>
+            <dt>Gösterim süresi</dt>
+            <dd>@Model.DisplayDurationSeconds saniye</dd>
+            <dt>Ekranlar</dt>
+            <dd>@string.Join(", ", Model.ScreenNames)</dd>
+        </dl>
+    </aside>
+</div>

@@ -57,6 +57,8 @@ builder.Services.Configure<SeedAdminOptions>(
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<DatabaseInitializer>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IAnnouncementStatusService, AnnouncementStatusService>();
+builder.Services.AddSingleton<IInstitutionDateTimeService, InstitutionDateTimeService>();
 
 WebApplication app = builder.Build();
 

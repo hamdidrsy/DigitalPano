@@ -18,7 +18,7 @@ public sealed class DashboardService(AppDbContext dbContext, TimeProvider timePr
             x => x.IsActive && x.StartDateUtc > utcNow,
             cancellationToken);
         int expiredAnnouncementCount = await dbContext.Announcements.CountAsync(
-            x => x.EndDateUtc < utcNow,
+            x => x.IsActive && x.EndDateUtc < utcNow,
             cancellationToken);
         int activeScreenCount = await dbContext.Screens.CountAsync(x => x.IsActive, cancellationToken);
         int onlineScreenCount = await dbContext.Screens.CountAsync(

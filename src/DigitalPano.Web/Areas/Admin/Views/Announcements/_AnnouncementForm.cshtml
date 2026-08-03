@@ -1,0 +1,76 @@
+@model AnnouncementFormViewModel
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+<div class="form-grid">
+    <section class="content-panel form-section">
+        <h2>Duyuru içeriği</h2>
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" maxlength="200" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="9" maxlength="4000"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </section>
+
+    <div>
+        <section class="content-panel form-section mb-3">
+            <h2>Yayın planı</h2>
+            <div class="mb-3">
+                <label asp-for="StartDate" class="form-label"></label>
+                <input asp-for="StartDate" asp-format="{0:yyyy-MM-ddTHH:mm}" type="datetime-local" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="EndDate" class="form-label"></label>
+                <input asp-for="EndDate" asp-format="{0:yyyy-MM-ddTHH:mm}" type="datetime-local" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <label asp-for="DisplayDurationSeconds" class="form-label"></label>
+                    <input asp-for="DisplayDurationSeconds" class="form-control" />
+                    <span asp-validation-for="DisplayDurationSeconds" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label asp-for="SortOrder" class="form-label"></label>
+                    <input asp-for="SortOrder" class="form-control" />
+                    <span asp-validation-for="SortOrder" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-check form-switch mt-3">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label"></label>
+            </div>
+        </section>
+
+        <section class="content-panel form-section">
+            <h2>Ekranlar</h2>
+            <p class="text-secondary small">Duyurunun gösterileceği en az bir ekranı seçin.</p>
+            <span asp-validation-for="SelectedScreenIds" class="text-danger d-block mb-2"></span>
+            @foreach (ScreenOptionViewModel screen in Model.Screens)
+            {
+                string inputId = $"screen-{screen.Id}";
+                <div class="form-check screen-option">
+                    <input id="@inputId"
+                           name="SelectedScreenIds"
+                           value="@screen.Id"
+                           type="checkbox"
+                           class="form-check-input"
+                           checked="@Model.SelectedScreenIds.Contains(screen.Id)" />
+                    <label for="@inputId" class="form-check-label">
+                        @screen.Name
+                        @if (!screen.IsActive)
+                        {
+                            <span class="text-secondary">(pasif ekran)</span>
+                        }
+                    </label>
+                </div>
+            }
+        </section>
+    </div>
+</div>

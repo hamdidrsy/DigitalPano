@@ -35,14 +35,14 @@
 
 ## Aşama 3 — Duyuru yönetimi
 
-- [ ] Duyuru listeleme ve filtreleme sayfasını oluştur.
-- [ ] Ekleme, düzenleme, ayrıntı ve silme işlemlerini oluştur.
-- [ ] Tarih, süre ve zorunlu alan doğrulamalarını ekle.
-- [ ] Duyuru-ekran atama arayüzünü oluştur.
-- [ ] Yayın durumunu hesaplayan servis yaz.
-- [ ] Ön izleme görünümünü oluştur.
-- [ ] İşlem kayıtlarını ekle.
-- [ ] CRUD ve yayın kuralı testlerini yaz.
+- [x] Duyuru listeleme ve filtreleme sayfasını oluştur.
+- [x] Ekleme, düzenleme, ön izleme ve silme işlemlerini oluştur.
+- [x] Tarih, süre ve zorunlu alan doğrulamalarını ekle.
+- [x] Duyuru-ekran atama arayüzünü oluştur.
+- [x] Yayın durumunu hesaplayan servis yaz.
+- [x] Ön izleme görünümünü oluştur.
+- [x] İşlem kayıtlarını ekle.
+- [x] CRUD ve yayın kuralı testlerini yaz.
 
 ## Aşama 4 — Medya
 

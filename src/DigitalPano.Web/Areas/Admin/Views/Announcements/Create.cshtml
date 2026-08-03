@@ -1,0 +1,24 @@
+@model AnnouncementFormViewModel
+@{
+    ViewData["Title"] = "Yeni Duyuru";
+}
+
+<div class="page-heading">
+    <div>
+        <p class="admin-eyebrow">Duyurular</p>
+        <h1>Yeni duyuru</h1>
+        <p class="text-secondary mb-0">Metni, yayın zamanını ve hedef ekranları belirleyin.</p>
+    </div>
+</div>
+
+<form asp-action="Create" method="post">
+    <partial name="_AnnouncementForm" model="Model" />
+    <div class="form-actions">
+        <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+        <button type="submit" class="btn btn-primary">Duyuruyu kaydet</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

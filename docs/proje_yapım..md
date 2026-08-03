@@ -310,6 +310,8 @@ Gerekirse kayan yazılar da ekranlarla çoktan çoğa ilişkilendirilir.
 
 ## 10. Aşama 3 — Duyuru yönetimi
 
+> **Durum: Tamamlandı — 4 Ağustos 2026.** Duyuru listeleme/filtreleme, metin duyurusu CRUD işlemleri, ekran atama, İstanbul saati–UTC dönüşümü, yayın durumu servisi, ön izleme, silme onayı, işlem kayıtları ve testler oluşturuldu. Ayrıntılar için [`07-asama-3-ozeti.md`](07-asama-3-ozeti.md) belgesine bakınız.
+
 ### Yapılacak işler
 
 1. Duyuru listeleme sayfası hazırlanır.

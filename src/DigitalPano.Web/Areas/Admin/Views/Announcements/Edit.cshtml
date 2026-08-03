@@ -1,0 +1,26 @@
+@model AnnouncementFormViewModel
+@{
+    ViewData["Title"] = "Duyuru Düzenle";
+}
+
+<div class="page-heading">
+    <div>
+        <p class="admin-eyebrow">Duyurular</p>
+        <h1>Duyuruyu düzenle</h1>
+        <p class="text-secondary mb-0">İçeriği veya yayın planını güncelleyin.</p>
+    </div>
+    <a asp-action="Preview" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Ön izle</a>
+</div>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <input asp-for="Id" type="hidden" />
+    <partial name="_AnnouncementForm" model="Model" />
+    <div class="form-actions">
+        <a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a>
+        <button type="submit" class="btn btn-primary">Değişiklikleri kaydet</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
