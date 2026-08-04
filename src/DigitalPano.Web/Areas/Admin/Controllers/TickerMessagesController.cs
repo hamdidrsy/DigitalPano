@@ -3,6 +3,7 @@ using DigitalPano.Web.Data;
 using DigitalPano.Web.Data.Entities;
 using DigitalPano.Web.Models.Admin.Tickers;
 using DigitalPano.Web.Services;
+using DigitalPano.Web.Services.RealTime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,8 @@ namespace DigitalPano.Web.Areas.Admin.Controllers;
 public sealed class TickerMessagesController(
     AppDbContext dbContext,
     IInstitutionDateTimeService dateTimeService,
-    TimeProvider timeProvider) : Controller
+    TimeProvider timeProvider,
+    IPanoNotifier? panoNotifier = null) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -72,6 +74,7 @@ public sealed class TickerMessagesController(
         await dbContext.SaveChangesAsync(cancellationToken);
         AddActivityLog("Create", message, "Kayan yazı oluşturuldu.");
         await dbContext.SaveChangesAsync(cancellationToken);
+        if (panoNotifier is not null) await panoNotifier.NotifyAllAsync(cancellationToken);
         TempData["SuccessMessage"] = "Kayan yazı oluşturuldu.";
         return RedirectToAction(nameof(Index));
     }
@@ -124,6 +127,7 @@ public sealed class TickerMessagesController(
         message.IsActive = model.IsActive;
         AddActivityLog("Update", message, "Kayan yazı güncellendi.");
         await dbContext.SaveChangesAsync(cancellationToken);
+        if (panoNotifier is not null) await panoNotifier.NotifyAllAsync(cancellationToken);
         TempData["SuccessMessage"] = "Kayan yazı güncellendi.";
         return RedirectToAction(nameof(Index));
     }
@@ -150,6 +154,7 @@ public sealed class TickerMessagesController(
         AddActivityLog("Delete", message, "Kayan yazı silindi.");
         dbContext.TickerMessages.Remove(message);
         await dbContext.SaveChangesAsync(cancellationToken);
+        if (panoNotifier is not null) await panoNotifier.NotifyAllAsync(cancellationToken);
         TempData["SuccessMessage"] = "Kayan yazı silindi.";
         return RedirectToAction(nameof(Index));
     }

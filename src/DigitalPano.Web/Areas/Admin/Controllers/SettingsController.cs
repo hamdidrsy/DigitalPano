@@ -5,13 +5,17 @@ using DigitalPano.Web.Models.Admin.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DigitalPano.Web.Services.RealTime;
 
 namespace DigitalPano.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Authorize]
 [AutoValidateAntiforgeryToken]
-public sealed class SettingsController(AppDbContext dbContext, TimeProvider timeProvider) : Controller
+public sealed class SettingsController(
+    AppDbContext dbContext,
+    TimeProvider timeProvider,
+    IPanoNotifier? panoNotifier = null) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -92,6 +96,10 @@ public sealed class SettingsController(AppDbContext dbContext, TimeProvider time
             CreatedAtUtc = timeProvider.GetUtcNow().UtcDateTime
         });
         await dbContext.SaveChangesAsync(cancellationToken);
+        if (panoNotifier is not null)
+        {
+            await panoNotifier.NotifyAllAsync(cancellationToken);
+        }
 
         TempData["SuccessMessage"] = "Kurum ayarları kaydedildi.";
         return RedirectToAction(nameof(Index));

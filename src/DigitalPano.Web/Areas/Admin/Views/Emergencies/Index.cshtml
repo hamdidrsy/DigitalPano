@@ -1,0 +1,35 @@
+@model EmergencyListViewModel
+@{
+    ViewData["Title"] = "Acil duyurular";
+}
+<div class="page-heading">
+    <div><p class="admin-eyebrow">Öncelikli yayın</p><h1>Acil duyurular</h1><p class="text-secondary mb-0">Hedef ekranları tamamen kaplayan yayınları yönetin.</p></div>
+    <a asp-action="Create" class="btn btn-danger">Yeni acil duyuru</a>
+</div>
+@if (TempData["SuccessMessage"] is string success) { <div class="alert alert-success">@success</div> }
+@if (TempData["ErrorMessage"] is string error) { <div class="alert alert-danger">@error</div> }
+<div class="content-panel table-responsive">
+    <table class="table align-middle admin-table">
+        <thead><tr><th>Duyuru</th><th>Ekranlar</th><th>Süre</th><th>Durum</th><th class="text-end">İşlem</th></tr></thead>
+        <tbody>
+        @if (Model.Items.Count == 0) { <tr><td colspan="5" class="text-center text-secondary py-5">Henüz acil duyuru bulunmuyor.</td></tr> }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td><strong class="d-block">@item.Title</strong><span class="text-secondary">@item.Description</span></td>
+                <td>@string.Join(", ", item.ScreenNames)</td>
+                <td>@item.StartDate.ToString("dd.MM.yyyy HH:mm")<br /><span class="text-secondary">@item.EndDate.ToString("dd.MM.yyyy HH:mm")</span></td>
+                <td><span class="status-badge @(item.IsLive ? "status-active" : "status-inactive")">@(item.IsLive ? "Yayında" : "Sona erdi")</span></td>
+                <td class="text-end">
+                    @if (item.IsLive)
+                    {
+                        <form asp-action="Stop" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Acil yayın sonlandırılsın ve normal yayına dönülsün mü?');">
+                            <input type="hidden" name="confirm" value="true" /><button class="btn btn-sm btn-outline-danger">Yayını sonlandır</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

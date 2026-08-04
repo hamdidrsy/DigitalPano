@@ -89,7 +89,7 @@ Bu belge Aşama 0'da alınan teknik kararları ve gerekçelerini kaydeder. Bir k
 ## Açık teknik kararlar
 
 - Canlı barındırma sunucusunun kesin özellikleri
-- Hava durumu hizmeti ve kullanım koşulları
+- Open-Meteo ticari kullanım koşullarının canlıya geçiş öncesi kurum tarafından doğrulanması
 - Canlı medya klasörünün kesin fiziksel yolu
 - Yedekleme hedefi ve saklama süresi
 - Pano cihazlarının marka, işletim sistemi ve tarayıcı sürümleri

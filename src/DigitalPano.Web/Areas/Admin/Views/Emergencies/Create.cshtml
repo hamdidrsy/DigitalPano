@@ -1,0 +1,14 @@
+@model EmergencyFormViewModel
+@{ ViewData["Title"] = "Acil duyuru başlat"; }
+<div class="page-heading"><div><p class="admin-eyebrow">Dikkat gerektiren işlem</p><h1>Acil duyuru başlat</h1><p class="text-secondary mb-0">Bu yayın seçilen ekranlarda normal içeriğin tamamını geçici olarak kapatır.</p></div><a asp-action="Index" class="btn btn-outline-secondary">Vazgeç</a></div>
+<div class="alert alert-danger"><strong>Acil yayın uyarısı:</strong> Kaydettiğiniz anda hedef panolar birkaç saniye içinde tam ekran acil moda geçer.</div>
+<form asp-action="Create" method="post" class="content-panel admin-form">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3"><label asp-for="Title" class="form-label"></label><input asp-for="Title" class="form-control" /><span asp-validation-for="Title" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control" rows="5"></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
+    <div class="row"><div class="col-md-6 mb-3"><label asp-for="MediaId" class="form-label"></label><select asp-for="MediaId" class="form-select"><option value="">Görsel kullanma</option>@foreach (var media in Model.ImageOptions) { <option value="@media.Id">@media.OriginalFileName</option> }</select><span asp-validation-for="MediaId" class="text-danger"></span></div><div class="col-md-6 mb-3"><label asp-for="DurationMinutes" class="form-label"></label><input asp-for="DurationMinutes" class="form-control" /><span asp-validation-for="DurationMinutes" class="text-danger"></span></div></div>
+    <fieldset class="mb-4"><legend class="form-label">Hedef ekranlar</legend>@foreach (var screen in Model.Screens) { <div class="form-check"><input class="form-check-input" type="checkbox" name="SelectedScreenIds" value="@screen.Id" id="screen-@screen.Id" /><label class="form-check-label" for="screen-@screen.Id">@screen.Name</label></div> }<span asp-validation-for="SelectedScreenIds" class="text-danger"></span></fieldset>
+    <div class="form-check border border-danger rounded p-3 ps-5 mb-4"><input asp-for="IsConfirmed" class="form-check-input" /><label asp-for="IsConfirmed" class="form-check-label fw-semibold"></label><span asp-validation-for="IsConfirmed" class="text-danger d-block"></span></div>
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Acil duyuru şimdi başlatılsın mı?');">Onayla ve yayını başlat</button>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

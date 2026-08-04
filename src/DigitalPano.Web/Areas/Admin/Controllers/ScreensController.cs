@@ -3,6 +3,7 @@ using DigitalPano.Web.Data;
 using DigitalPano.Web.Data.Entities;
 using DigitalPano.Web.Models.Admin.Screens;
 using DigitalPano.Web.Services;
+using DigitalPano.Web.Services.RealTime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,8 @@ public sealed class ScreensController(
     ISlugService slugService,
     IScreenKeyService screenKeyService,
     IInstitutionDateTimeService dateTimeService,
-    TimeProvider timeProvider) : Controller
+    TimeProvider timeProvider,
+    IPanoNotifier? panoNotifier = null) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -121,6 +123,7 @@ public sealed class ScreensController(
         screen.IsActive = model.IsActive;
         AddActivityLog("Update", screen, $"'{screen.Name}' ekranı güncellendi.");
         await dbContext.SaveChangesAsync(cancellationToken);
+        if (panoNotifier is not null) await panoNotifier.NotifyScreensAsync([screen.Id], cancellationToken);
 
         TempData["SuccessMessage"] = "Ekran başarıyla güncellendi.";
         return RedirectToAction(nameof(Index));
@@ -138,6 +141,7 @@ public sealed class ScreensController(
         screen.DeviceKey = screenKeyService.Generate();
         AddActivityLog("RegenerateKey", screen, $"'{screen.Name}' ekranının cihaz anahtarı yenilendi.");
         await dbContext.SaveChangesAsync(cancellationToken);
+        if (panoNotifier is not null) await panoNotifier.NotifyScreensAsync([screen.Id], cancellationToken);
 
         TempData["SuccessMessage"] = "Cihaz anahtarı yenilendi. Eski pano adresi artık çalışmaz.";
         return RedirectToAction(nameof(Index));

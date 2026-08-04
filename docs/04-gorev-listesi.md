@@ -74,31 +74,31 @@
 
 ## Aşama 7 — Gerçek zamanlı çalışma
 
-- [ ] Pano SignalR Hub'ını oluştur.
-- [ ] Ekran gruplarına katılma kuralını uygula.
-- [ ] Yönetim değişikliklerinden bildirim gönder.
-- [ ] Pano otomatik yeniden bağlantısını uygula.
-- [ ] Periyodik HTTP yenileme yedeğini ekle.
-- [ ] Son bağlantı ve çevrimiçi durum hesabını ekle.
-- [ ] SignalR entegrasyon testlerini yaz.
+- [x] Pano SignalR Hub'ını oluştur.
+- [x] Ekran gruplarına katılma kuralını uygula.
+- [x] Yönetim değişikliklerinden bildirim gönder.
+- [x] Pano otomatik yeniden bağlantısını uygula.
+- [x] Periyodik HTTP yenileme yedeğini ekle.
+- [x] Son bağlantı ve çevrimiçi durum hesabını ekle.
+- [x] SignalR entegrasyon testlerini yaz.
 
 ## Aşama 8 — Acil duyuru
 
-- [ ] Acil duyuru oluşturma ve onay akışını ekle.
-- [ ] Ekran başına tek aktif acil yayın kuralını uygula.
-- [ ] Tam ekran acil yayın görünümünü oluştur.
-- [ ] Başlatma/sonlandırma SignalR bildirimlerini ekle.
-- [ ] Normal yayına güvenli dönüşü uygula.
-- [ ] Acil yayın işlem kayıtlarını ve testlerini ekle.
+- [x] Acil duyuru oluşturma ve onay akışını ekle.
+- [x] Ekran başına tek aktif acil yayın kuralını uygula.
+- [x] Tam ekran acil yayın görünümünü oluştur.
+- [x] Başlatma/sonlandırma SignalR bildirimlerini ekle.
+- [x] Normal yayına güvenli dönüşü uygula.
+- [x] Acil yayın işlem kayıtlarını ve testlerini ekle.
 
 ## Aşama 9 — Yardımcı alanlar ve çevrimdışı çalışma
 
-- [ ] Hava durumu sağlayıcısını seç ve sunucu önbelleğini uygula.
-- [ ] Sağ panel kategori gösterimini oluştur.
-- [ ] Uygulama kabuğu Service Worker önbelleğini ekle.
-- [ ] Son yayın verisini istemcide sakla.
-- [ ] Bağlantı geri geldiğinde eşitleme davranışını uygula.
-- [ ] Çevrimdışı ve servis kesintisi testlerini yap.
+- [x] Hava durumu sağlayıcısını seç ve sunucu önbelleğini uygula.
+- [x] Sağ panel kategori gösterimini oluştur.
+- [x] Uygulama kabuğu Service Worker önbelleğini ekle.
+- [x] Son yayın verisini istemcide sakla.
+- [x] Bağlantı geri geldiğinde eşitleme davranışını uygula.
+- [x] Çevrimdışı ve servis kesintisi testlerini yap.
 
 ## Aşama 10 — Kalite ve canlıya geçiş
 

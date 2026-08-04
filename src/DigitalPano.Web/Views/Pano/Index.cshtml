@@ -27,7 +27,28 @@
 <body>
     <main class="pano-shell"
           data-pano-root
+          data-screen-slug="@Model.ScreenSlug"
+          data-refresh-url="@Url.Action("Index", "Pano", new { slug = Model.ScreenSlug, key = Model.DeviceKey })"
+          data-signalr-url="/hubs/pano?slug=@Uri.EscapeDataString(Model.ScreenSlug)&amp;key=@Uri.EscapeDataString(Model.DeviceKey)"
           data-heartbeat-url="@Url.Action("Heartbeat", "Pano", new { slug = Model.ScreenSlug, key = Model.DeviceKey })">
+        @if (Model.EmergencyContent is not null)
+        {
+            string? emergencyMediaUrl = Model.EmergencyContent.MediaId.HasValue
+                ? Url.Action("Media", "Pano", new { slug = Model.ScreenSlug, mediaId = Model.EmergencyContent.MediaId, key = Model.DeviceKey })
+                : null;
+            <section class="emergency-screen" role="alert" aria-live="assertive">
+                <div class="emergency-pulse">ACİL DUYURU</div>
+                @if (emergencyMediaUrl is not null)
+                {
+                    <img src="@emergencyMediaUrl" alt="" class="emergency-image" />
+                }
+                <h1>@Model.EmergencyContent.Title</h1>
+                <p>@Model.EmergencyContent.Description</p>
+                <div class="emergency-institution">@Model.InstitutionName</div>
+            </section>
+        }
+        else
+        {
         <header class="pano-header">
             <div class="institution-brand">
                 @if (logoUrl is not null)
@@ -98,9 +119,22 @@
                     <p>Güncel kurum duyuruları</p>
                 </section>
                 <section>
+                    <span class="sidebar-label">HAVA DURUMU</span>
+                    @if (Model.Weather is not null)
+                    {
+                        <strong class="weather-value"><span>@Model.Weather.Symbol</span> @Model.Weather.TemperatureCelsius.ToString("0")°</strong>
+                        <p>@Model.City · @Model.Weather.Description</p>
+                    }
+                    else
+                    {
+                        <strong>—</strong><p>@Model.City · Veri alınamıyor</p>
+                    }
+                </section>
+                <section>
                     <span class="sidebar-label">YAYIN</span>
                     <strong>@Model.Items.Count içerik</strong>
-                    <p>Otomatik olarak güncellenir</p>
+                    <p>@(Model.ContentCategories.Count > 0 ? string.Join(" · ", Model.ContentCategories) : "Bekleme ekranı")</p>
+                    <p data-connection-status>Çevrimiçi · Otomatik güncellenir</p>
                 </section>
             </aside>
         </section>
@@ -114,6 +148,7 @@
                 </div>
             </div>
         </footer>
+        }
     </main>
     <script src="~/js/pano.js" asp-append-version="true"></script>
 </body>

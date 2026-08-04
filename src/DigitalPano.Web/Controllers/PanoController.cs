@@ -3,6 +3,7 @@ using DigitalPano.Web.Data.Entities;
 using DigitalPano.Web.Models.Pano;
 using DigitalPano.Web.Services;
 using DigitalPano.Web.Services.Media;
+using DigitalPano.Web.Services.Weather;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,8 @@ public sealed class PanoController(
     AppDbContext dbContext,
     IScreenKeyService screenKeyService,
     IMediaStorageService mediaStorageService,
-    TimeProvider timeProvider) : Controller
+    TimeProvider timeProvider,
+    IWeatherService? weatherService = null) : Controller
 {
     [HttpGet("pano/{slug}")]
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
@@ -60,6 +62,19 @@ public sealed class PanoController(
             .OrderBy(x => x.SortOrder)
             .ThenBy(x => x.Id)
             .ToListAsync(cancellationToken);
+        Announcement? emergency = await dbContext.Announcements
+            .AsNoTracking()
+            .Include(x => x.Media)
+            .Where(x => x.IsActive && x.IsEmergency &&
+                        x.StartDateUtc <= utcNow && x.EndDateUtc >= utcNow &&
+                        x.AnnouncementScreens.Any(s => s.ScreenId == screen.Id) &&
+                        (x.ContentType == AnnouncementContentType.Text || x.MediaId != null))
+            .OrderByDescending(x => x.StartDateUtc)
+            .FirstOrDefaultAsync(cancellationToken);
+        string city = institution?.City ?? "İstanbul";
+        WeatherSnapshot? weather = weatherService is null
+            ? null
+            : await weatherService.GetCurrentAsync(city, cancellationToken);
 
         var model = new PanoViewModel
         {
@@ -71,7 +86,21 @@ public sealed class PanoController(
             ScreenName = screen.Name,
             ScreenSlug = screen.Slug,
             DeviceKey = screen.DeviceKey,
+            City = city,
+            Weather = weather is null ? null : new PanoWeatherViewModel(
+                weather.TemperatureCelsius, weather.Description, weather.Symbol),
+            ContentCategories = announcements.Select(x => x.ContentType switch
+                {
+                    AnnouncementContentType.Image => "Görsel",
+                    AnnouncementContentType.Video => "Video",
+                    _ => "Metin"
+                })
+                .Distinct()
+                .ToArray(),
             TickerMessages = tickerMessages,
+            EmergencyContent = emergency is null ? null : new PanoContentItemViewModel(
+                emergency.Id, emergency.Title, emergency.Description, emergency.ContentType,
+                emergency.MediaId, emergency.Media?.MimeType, emergency.DisplayDurationSeconds),
             Items = announcements.Select(x => new PanoContentItemViewModel(
                 x.Id,
                 x.Title,
@@ -125,7 +154,6 @@ public sealed class PanoController(
                 x.Id == mediaId &&
                 (x.Announcements.Any(a =>
                      a.IsActive &&
-                     !a.IsEmergency &&
                      a.StartDateUtc <= utcNow &&
                      a.EndDateUtc >= utcNow &&
                      a.AnnouncementScreens.Any(s => s.ScreenId == screen.Id)) ||

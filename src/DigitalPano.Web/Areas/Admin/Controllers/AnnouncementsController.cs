@@ -3,6 +3,7 @@ using DigitalPano.Web.Data;
 using DigitalPano.Web.Data.Entities;
 using DigitalPano.Web.Models.Admin.Announcements;
 using DigitalPano.Web.Services;
+using DigitalPano.Web.Services.RealTime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,8 @@ public sealed class AnnouncementsController(
     AppDbContext dbContext,
     IAnnouncementStatusService statusService,
     IInstitutionDateTimeService dateTimeService,
-    TimeProvider timeProvider) : Controller
+    TimeProvider timeProvider,
+    IPanoNotifier? panoNotifier = null) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Index(
@@ -135,6 +137,10 @@ public sealed class AnnouncementsController(
 
         AddActivityLog("Create", announcement, $"'{announcement.Title}' duyurusu oluşturuldu.");
         await dbContext.SaveChangesAsync(cancellationToken);
+        if (panoNotifier is not null)
+        {
+            await panoNotifier.NotifyScreensAsync(validScreenIds, cancellationToken);
+        }
 
         TempData["SuccessMessage"] = "Duyuru başarıyla oluşturuldu.";
         return RedirectToAction(nameof(Index));
@@ -213,6 +219,8 @@ public sealed class AnnouncementsController(
         announcement.UpdatedAtUtc = timeProvider.GetUtcNow().UtcDateTime;
 
         HashSet<int> selectedScreenIds = validScreenIds.ToHashSet();
+        HashSet<int> affectedScreenIds = announcement.AnnouncementScreens.Select(x => x.ScreenId)
+            .Concat(selectedScreenIds).ToHashSet();
         List<AnnouncementScreen> removedScreens = announcement.AnnouncementScreens
             .Where(x => !selectedScreenIds.Contains(x.ScreenId))
             .ToList();
@@ -232,6 +240,10 @@ public sealed class AnnouncementsController(
 
         AddActivityLog("Update", announcement, $"'{announcement.Title}' duyurusu güncellendi.");
         await dbContext.SaveChangesAsync(cancellationToken);
+        if (panoNotifier is not null)
+        {
+            await panoNotifier.NotifyScreensAsync(affectedScreenIds, cancellationToken);
+        }
 
         TempData["SuccessMessage"] = "Duyuru başarıyla güncellendi.";
         return RedirectToAction(nameof(Index));
@@ -293,6 +305,7 @@ public sealed class AnnouncementsController(
     public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
     {
         Announcement? announcement = await dbContext.Announcements
+            .Include(x => x.AnnouncementScreens)
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (announcement is null)
         {
@@ -302,6 +315,11 @@ public sealed class AnnouncementsController(
         AddActivityLog("Delete", announcement, $"'{announcement.Title}' duyurusu silindi.");
         dbContext.Announcements.Remove(announcement);
         await dbContext.SaveChangesAsync(cancellationToken);
+        if (panoNotifier is not null)
+        {
+            await panoNotifier.NotifyScreensAsync(
+                announcement.AnnouncementScreens.Select(x => x.ScreenId), cancellationToken);
+        }
 
         TempData["SuccessMessage"] = "Duyuru silindi.";
         return RedirectToAction(nameof(Index));

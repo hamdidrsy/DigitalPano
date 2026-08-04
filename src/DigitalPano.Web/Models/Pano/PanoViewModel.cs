@@ -22,8 +22,18 @@ public sealed class PanoViewModel
 
     public IReadOnlyList<PanoContentItemViewModel> Items { get; init; } = [];
 
+    public PanoContentItemViewModel? EmergencyContent { get; init; }
+
     public IReadOnlyList<string> TickerMessages { get; init; } = [];
+
+    public string City { get; init; } = string.Empty;
+
+    public PanoWeatherViewModel? Weather { get; init; }
+
+    public IReadOnlyList<string> ContentCategories { get; init; } = [];
 }
+
+public sealed record PanoWeatherViewModel(double TemperatureCelsius, string Description, string Symbol);
 
 public sealed record PanoContentItemViewModel(
     int Id,

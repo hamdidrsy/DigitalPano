@@ -62,6 +62,26 @@ public sealed class PanoControllerTests
         Assert.Equal(utcNow, screen.LastConnectionDateUtc);
     }
 
+    [Fact]
+    public async Task IndexPrioritizesActiveEmergencyForTargetScreen()
+    {
+        await using AppDbContext dbContext = CreateContext();
+        DateTime utcNow = new(2026, 8, 4, 9, 0, 0, DateTimeKind.Utc);
+        AddPanoTestData(dbContext, utcNow);
+        await dbContext.SaveChangesAsync();
+        Screen screen = await dbContext.Screens.SingleAsync(x => x.Id == 101);
+        dbContext.Announcements.Add(CreateEmergency(301, "Acil tahliye", utcNow, screen));
+        await dbContext.SaveChangesAsync();
+
+        ViewResult view = Assert.IsType<ViewResult>(
+            await CreateController(dbContext, utcNow).Index("giris", "correct-key", CancellationToken.None));
+        PanoViewModel model = Assert.IsType<PanoViewModel>(view.Model);
+
+        Assert.NotNull(model.EmergencyContent);
+        Assert.Equal("Acil tahliye", model.EmergencyContent.Title);
+        Assert.Single(model.Items);
+    }
+
     private static PanoController CreateController(AppDbContext dbContext, DateTime utcNow)
     {
         var controller = new PanoController(
@@ -134,6 +154,15 @@ public sealed class PanoControllerTests
             AnnouncementScreens = [new AnnouncementScreen { Screen = screen, ScreenId = screen.Id }]
         };
     }
+
+    private static Announcement CreateEmergency(int id, string title, DateTime utcNow, Screen screen) => new()
+    {
+        Id = id, Title = title, Description = title,
+        ContentType = AnnouncementContentType.Text,
+        StartDateUtc = utcNow.AddMinutes(-1), EndDateUtc = utcNow.AddMinutes(30),
+        IsActive = true, IsEmergency = true,
+        AnnouncementScreens = [new AnnouncementScreen { Screen = screen, ScreenId = screen.Id }]
+    };
 
     private static AppDbContext CreateContext()
     {

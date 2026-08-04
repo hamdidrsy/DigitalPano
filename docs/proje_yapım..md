@@ -446,6 +446,8 @@ EndDate >= şu an
 
 ## 15. Aşama 8 — SignalR ile gerçek zamanlı yayın
 
+> **Durum: Tamamlandı — 4 Ağustos 2026.** Bu bölüm görev listesindeki Aşama 7 kapsamında tamamlandı. Yetkili ekran grupları, hedefli değişiklik bildirimleri, otomatik yeniden bağlantı, 30 saniyelik HTTP yenileme yedeği ve çevrimiçi durum takibi eklendi. Ayrıntılar için [`11-asama-7-ozeti.md`](11-asama-7-ozeti.md) belgesine bakınız.
+
 ### Yapılacak işler
 
 1. Bir SignalR Hub oluşturulur.
@@ -464,6 +466,8 @@ EndDate >= şu an
 ---
 
 ## 16. Aşama 9 — Acil duyuru
+
+> **Durum: Tamamlandı — 4 Ağustos 2026.** Bu bölüm görev listesindeki Aşama 8 kapsamında tamamlandı. Çift onaylı acil yayın başlatma/sonlandırma, ekran başına tek aktif yayın, tam ekran pano modu, SignalR geçişleri ve işlem kayıtları oluşturuldu. Ayrıntılar için [`12-asama-8-ozeti.md`](12-asama-8-ozeti.md) belgesine bakınız.
 
 ### Davranış kuralları
 
@@ -492,6 +496,8 @@ EndDate >= şu an
 
 ## 17. Aşama 10 — Hava durumu ve yardımcı alanlar
 
+> **Durum: Tamamlandı — 4 Ağustos 2026.** Bu bölüm ve temel çevrimdışı davranış görev listesindeki Aşama 9 kapsamında tamamlandı. Open-Meteo hava durumu, sağ panel kategorileri, Service Worker kabuk/görsel önbelleği, son yayın koruması ve otomatik eşitleme eklendi. Ayrıntılar için [`13-asama-9-ozeti.md`](13-asama-9-ozeti.md) belgesine bakınız.
+
 ### Yapılacak işler
 
 1. Hava durumu veri kaynağı seçilir.
@@ -511,6 +517,8 @@ EndDate >= şu an
 ---
 
 ## 18. Aşama 11 — Çevrimdışı çalışma
+
+> **Durum: Temel kapsam tamamlandı — 4 Ağustos 2026.** Uygulama kabuğu, son başarılı pano sayfası ve görseller önbelleğe alınmaktadır. Büyük videolar cihaz kapasitesi ve Range istekleri nedeniyle bilinçli olarak çevrimdışı önbelleğe dahil edilmemiştir.
 
 ### Yapılacak işler
 
@@ -755,10 +763,10 @@ Bağımlılıklar dikkate alınarak uygulama şu sırayla geliştirilecektir:
 - [ ] Kayan yazı çalışıyor.
 - [ ] Kurum adı, logo ve renkler yönetilebiliyor.
 - [ ] Tarih ve saat doğru gösteriliyor.
-- [ ] SignalR değişiklikleri ekranlara iletiyor.
-- [ ] Acil duyuru tam ekran çalışıyor.
-- [ ] Ekran bağlantı durumu izlenebiliyor.
-- [ ] Bağlantı kesildiğinde yedek içerik gösteriliyor.
+- [x] SignalR değişiklikleri ekranlara iletiyor.
+- [x] Acil duyuru tam ekran çalışıyor.
+- [x] Ekran bağlantı durumu izlenebiliyor.
+- [x] Bağlantı kesildiğinde yedek içerik gösteriliyor.
 
 ### Kalite ve güvenlik
 

@@ -1,21 +1,25 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DigitalPano.Web.Models;
+using DigitalPano.Web.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigitalPano.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController(AppDbContext dbContext) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        _logger = logger;
-    }
+        var screen = await dbContext.Screens.AsNoTracking()
+            .Where(x => x.IsActive)
+            .OrderBy(x => x.Id)
+            .Select(x => new { x.Slug, x.DeviceKey })
+            .FirstOrDefaultAsync(cancellationToken);
 
-    public IActionResult Index()
-    {
-        return View();
+        return screen is null
+            ? View()
+            : RedirectToAction("Index", "Pano", new { slug = screen.Slug, key = screen.DeviceKey });
     }
 
     public IActionResult Privacy()

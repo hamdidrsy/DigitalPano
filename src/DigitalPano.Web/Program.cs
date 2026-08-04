@@ -3,6 +3,9 @@ using DigitalPano.Web.Data.Entities;
 using DigitalPano.Web.Options;
 using DigitalPano.Web.Services;
 using DigitalPano.Web.Services.Media;
+using DigitalPano.Web.Services.RealTime;
+using DigitalPano.Web.Hubs;
+using DigitalPano.Web.Services.Weather;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.Features;
@@ -10,6 +13,10 @@ using Microsoft.AspNetCore.Http.Features;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient(nameof(OpenMeteoWeatherService), client =>
+    client.Timeout = TimeSpan.FromSeconds(5));
 builder.Services.AddAntiforgery(options =>
 {
     options.Cookie.Name = "DigitalPano.Antiforgery";
@@ -68,6 +75,8 @@ builder.Services.AddSingleton<IInstitutionDateTimeService, InstitutionDateTimeSe
 builder.Services.AddSingleton<IMediaStorageService, LocalMediaStorageService>();
 builder.Services.AddSingleton<ISlugService, SlugService>();
 builder.Services.AddSingleton<IScreenKeyService, ScreenKeyService>();
+builder.Services.AddScoped<IPanoNotifier, SignalRPanoNotifier>();
+builder.Services.AddScoped<IWeatherService, OpenMeteoWeatherService>();
 
 WebApplication app = builder.Build();
 
@@ -94,6 +103,8 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<PanoHub>("/hubs/pano");
 
 await using (AsyncServiceScope scope = app.Services.CreateAsyncScope())
 {
