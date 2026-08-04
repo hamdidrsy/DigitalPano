@@ -540,6 +540,8 @@ EndDate >= şu an
 
 ## 19. Aşama 12 — Test süreci
 
+> **Durum: Otomatik test paketi tamamlandı — 4 Ağustos 2026.** Birim, veri modeli, controller entegrasyonu ve izole HTTP uçtan uca testleri tek çözüm altında çalışmaktadır. Ayrıntılar için [`14-asama-10-test-ozeti.md`](14-asama-10-test-ozeti.md) belgesine bakınız. Fiziksel TV/TV Box ve 72 saat dayanıklılık testleri ayrı canlıya geçiş maddeleridir.
+
 ### 19.1. Birim testleri
 
 - Aktif yayın tarih filtresi

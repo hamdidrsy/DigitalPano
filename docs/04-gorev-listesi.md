@@ -102,7 +102,7 @@
 
 ## Aşama 10 — Kalite ve canlıya geçiş
 
-- [ ] Birim, entegrasyon ve uçtan uca test paketini tamamla.
+- [x] Birim, entegrasyon ve uçtan uca test paketini tamamla.
 - [ ] XSS, CSRF, dosya yükleme ve yetki kontrollerini doğrula.
 - [ ] 1920×1080 ve varsa 4K görünüm testini yap.
 - [ ] Hedef cihazda 72 saat açık kalma testi yap.
