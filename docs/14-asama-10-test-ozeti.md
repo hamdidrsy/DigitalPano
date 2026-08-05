@@ -48,11 +48,11 @@ dotnet test DigitalPano.sln --filter FullyQualifiedName~EndToEnd
 
 ## Sonuç
 
-- Toplam: 52 test
-- Başarılı: 52
+- Toplam: 64 test
+- Başarılı: 64
 - Başarısız: 0
 - Derleme: 0 uyarı, 0 hata
-- Cobertura başlangıç kapsamı: satır %32,49 (1296/3988), dal %35,81 (322/899)
+- Cobertura güncel kapsamı: satır %32,99 (1316/3988), dal %37,04 (333/899)
 
 Kapsam ölçümü test edilmeyen Razor tarafından üretilen kodu ve uygulama başlangıç kodunu da içerir. Bu değer sonraki güvenlik ve kalite görevlerinde kritik servisler için artırılacak bir başlangıç ölçümüdür; yalnız başına canlıya geçiş onayı değildir.
 

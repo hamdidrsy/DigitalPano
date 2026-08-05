@@ -69,6 +69,31 @@ public sealed class LocalMediaStorageServiceTests : IDisposable
         Assert.False(result.IsValid);
     }
 
+    [Theory]
+    [InlineData("resim.png", "application/octet-stream")]
+    [InlineData("resim.png.exe", "image/png")]
+    [InlineData("resim.svg", "image/svg+xml")]
+    public async Task DangerousExtensionOrMimeCombinationsAreRejected(string fileName, string contentType)
+    {
+        LocalMediaStorageService service = CreateService();
+        byte[] png = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 1];
+
+        MediaValidationResult result = await service.ValidateAsync(CreateFormFile(fileName, contentType, png));
+
+        Assert.False(result.IsValid);
+    }
+
+    [Fact]
+    public async Task EmptyUploadIsRejected()
+    {
+        LocalMediaStorageService service = CreateService();
+
+        MediaValidationResult result = await service.ValidateAsync(
+            CreateFormFile("bos.png", "image/png", []));
+
+        Assert.False(result.IsValid);
+    }
+
     [Fact]
     public async Task ImageOverConfiguredLimitIsRejected()
     {

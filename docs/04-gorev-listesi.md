@@ -103,8 +103,8 @@
 ## Aşama 10 — Kalite ve canlıya geçiş
 
 - [x] Birim, entegrasyon ve uçtan uca test paketini tamamla.
-- [ ] XSS, CSRF, dosya yükleme ve yetki kontrollerini doğrula.
-- [ ] 1920×1080 ve varsa 4K görünüm testini yap.
+- [x] XSS, CSRF, dosya yükleme ve yetki kontrollerini doğrula.
+- [x] 1920×1080 ve varsa 4K görünüm testini yap.
 - [ ] Hedef cihazda 72 saat açık kalma testi yap.
 - [ ] IIS/HTTPS/SQL Server canlı kurulumunu hazırla.
 - [ ] Veritabanı ve medya yedekleme/geri yükleme testini yap.

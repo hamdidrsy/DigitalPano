@@ -542,6 +542,10 @@ EndDate >= şu an
 
 > **Durum: Otomatik test paketi tamamlandı — 4 Ağustos 2026.** Birim, veri modeli, controller entegrasyonu ve izole HTTP uçtan uca testleri tek çözüm altında çalışmaktadır. Ayrıntılar için [`14-asama-10-test-ozeti.md`](14-asama-10-test-ozeti.md) belgesine bakınız. Fiziksel TV/TV Box ve 72 saat dayanıklılık testleri ayrı canlıya geçiş maddeleridir.
 
+> **Güvenlik doğrulaması: Tamamlandı — 5 Ağustos 2026.** XSS kodlama, antiforgery, zararlı dosya yükleme ve anonim/yetkisiz erişim senaryoları doğrulandı. Ayrıntılar için [`15-asama-10-guvenlik-dogrulama.md`](15-asama-10-guvenlik-dogrulama.md) belgesine bakınız.
+
+> **Görünüm doğrulaması: Tamamlandı — 5 Ağustos 2026.** Gerçek pano yayını Chromium motorunda 1920×1080 ve 3840×2160 çözünürlüklerinde görüntülenerek taşma, kırpılma, ölçekleme ve okunabilirlik açısından kontrol edildi. Ayrıntılar için [`16-asama-10-gorunum-testi.md`](16-asama-10-gorunum-testi.md) belgesine bakınız.
+
 ### 19.1. Birim testleri
 
 - Aktif yayın tarih filtresi
