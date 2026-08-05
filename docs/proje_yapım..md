@@ -546,6 +546,8 @@ EndDate >= şu an
 
 > **Görünüm doğrulaması: Tamamlandı — 5 Ağustos 2026.** Gerçek pano yayını Chromium motorunda 1920×1080 ve 3840×2160 çözünürlüklerinde görüntülenerek taşma, kırpılma, ölçekleme ve okunabilirlik açısından kontrol edildi. Ayrıntılar için [`16-asama-10-gorunum-testi.md`](16-asama-10-gorunum-testi.md) belgesine bakınız.
 
+> **72 saat dayanıklılık testi: Altyapı hazır — 5 Ağustos 2026.** Dakikalık erişim/gecikme kaydı, CSV/JSON raporu ve 0/24/48/72. saat fiziksel kontrol planı hazırlandı. Gerçek TV Box/stick veya mini bilgisayar belirlenip 72 saat tamamlanmadan görev kapatılmayacaktır. Ayrıntılar için [`17-asama-10-72-saat-test-plani.md`](17-asama-10-72-saat-test-plani.md) belgesine bakınız.
+
 ### 19.1. Birim testleri
 
 - Aktif yayın tarih filtresi
