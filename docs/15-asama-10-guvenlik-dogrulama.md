@@ -39,7 +39,7 @@ XSS, CSRF, dosya yükleme ve yetkisiz erişim kontrolleri kaynak kod denetimi ve
 ## Otomatik test kanıtı
 
 - Güvenlik odaklı paket: 25/25 başarılı
-- Tüm otomatik paket: 64/64 başarılı
+- Tüm otomatik paket: 66/66 başarılı
 - Derleme: 0 uyarı, 0 hata
 
 ## Canlı ortam için kalan savunma katmanları

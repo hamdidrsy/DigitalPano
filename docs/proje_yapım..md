@@ -548,6 +548,8 @@ EndDate >= şu an
 
 > **72 saat dayanıklılık testi: Altyapı hazır — 5 Ağustos 2026.** Dakikalık erişim/gecikme kaydı, CSV/JSON raporu ve 0/24/48/72. saat fiziksel kontrol planı hazırlandı. Gerçek TV Box/stick veya mini bilgisayar belirlenip 72 saat tamamlanmadan görev kapatılmayacaktır. Ayrıntılar için [`17-asama-10-72-saat-test-plani.md`](17-asama-10-72-saat-test-plani.md) belgesine bakınız.
 
+> **IIS/HTTPS/SQL Server canlı kurulum hazırlığı: Tamamlandı — 5 Ağustos 2026.** Release/win-x64 klasör profili, sürümlü ZIP ve SHA-256 manifest üretimi, idempotent migration SQL'i, en az yetkili IIS AppPool SQL hesabı, klasör ACL/web.config betikleri, liveness/readiness uçları, HTTPS ve geri alma rehberi hazırlandı. Ayrıntılar için [`18-asama-10-iis-canli-kurulum.md`](18-asama-10-iis-canli-kurulum.md) belgesine bakınız.
+
 ### 19.1. Birim testleri
 
 - Aktif yayın tarih filtresi

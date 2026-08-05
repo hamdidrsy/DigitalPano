@@ -48,8 +48,8 @@ dotnet test DigitalPano.sln --filter FullyQualifiedName~EndToEnd
 
 ## Sonuç
 
-- Toplam: 64 test
-- Başarılı: 64
+- Toplam: 66 test
+- Başarılı: 66
 - Başarısız: 0
 - Derleme: 0 uyarı, 0 hata
 - Cobertura güncel kapsamı: satır %32,99 (1316/3988), dal %37,04 (333/899)

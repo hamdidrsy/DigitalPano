@@ -12,6 +12,13 @@ using Microsoft.AspNetCore.Http.Features;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection yapılandırılmalıdır.");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("ConnectionStrings:DefaultConnection boş olamaz.");
+}
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 builder.Services.AddMemoryCache();
@@ -25,7 +32,7 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 builder.Services
     .AddIdentity<AppUser, IdentityRole>(options =>
     {
@@ -63,8 +70,13 @@ builder.Services.AddHsts(options =>
 
 builder.Services.Configure<SeedAdminOptions>(
     builder.Configuration.GetSection(SeedAdminOptions.SectionName));
-builder.Services.Configure<MediaStorageOptions>(
-    builder.Configuration.GetSection(MediaStorageOptions.SectionName));
+builder.Services.AddOptions<MediaStorageOptions>()
+    .Bind(builder.Configuration.GetSection(MediaStorageOptions.SectionName))
+    .Validate(options => options.MaxImageBytes > 0 && options.MaxVideoBytes > 0,
+        "Medya dosya boyutu sınırları sıfırdan büyük olmalıdır.")
+    .Validate(options => !builder.Environment.IsProduction() || Path.IsPathRooted(options.RootPath),
+        "Production ortamında MediaStorage:RootPath mutlak bir dosya yolu olmalıdır.")
+    .ValidateOnStart();
 builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 210L * 1024 * 1024);
 builder.Services.AddSingleton(TimeProvider.System);
