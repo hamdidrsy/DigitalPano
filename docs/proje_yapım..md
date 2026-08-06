@@ -683,6 +683,8 @@ EndDate >= şu an
 - Tüm ekranlar canlı yayını kararlı biçimde gösterir.
 - Kurum proje kabulünü tamamlamıştır.
 
+> **Eğitim ve kabul paketi: Hazır — 6 Ağustos 2026.** Türkçe kullanıcı eğitimi, 12 ölçülebilir kabul senaryosu ve imzalanabilir kabul formu hazırlandı. Gerçek kurum kullanıcısıyla eğitim uygulanıp form onaylanmadan görev tamamlanmış sayılmaz. Ayrıntılar için [`20-asama-10-kullanici-egitimi-ve-kabul.md`](20-asama-10-kullanici-egitimi-ve-kabul.md) ve [`21-kullanici-kabul-formu.md`](21-kullanici-kabul-formu.md) belgelerine bakınız.
+
 ---
 
 ## 23. Bakım ve işletme planı
