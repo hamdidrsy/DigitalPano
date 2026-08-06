@@ -108,7 +108,7 @@
 - [ ] Hedef cihazda 72 saat açık kalma testi yap.
 - [x] IIS/HTTPS/SQL Server canlı kurulumunu hazırla.
 - [ ] Veritabanı ve medya yedekleme/geri yükleme testini yap.
-- [ ] Kiosk otomatik başlangıcını yapılandır.
+- [x] Kiosk otomatik başlangıcını yapılandır.
 - [ ] Gerçek kurum verilerini gir.
 - [ ] Kullanıcı eğitimini ve kabul senaryolarını tamamla.
 - [ ] İlk canlı yayını başlat ve ilk hafta izleme yap.

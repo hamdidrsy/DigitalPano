@@ -651,6 +651,8 @@ EndDate >= şu an
 - Cihaz yeniden başlatıldığında insan müdahalesi olmadan pano açılır.
 - Ekran doğru içerikleri tam ekran gösterir.
 
+> **Kiosk otomatik başlangıç paketi: Tamamlandı — 6 Ağustos 2026.** Windows 10/11 mini PC veya TV Box üzerinde Microsoft Edge'i tam ekran kiosk modunda açan, kullanıcı oturumunda otomatik başlayan ve tarayıcı kapanırsa yeniden çalıştıran kurulum/kaldırma betikleri hazırlandı. Fiziksel cihazın yeniden başlatma kabulü cihaz kurulumunda yapılmalıdır. Ayrıntılar için [`19-asama-10-kiosk-otomatik-baslangic.md`](19-asama-10-kiosk-otomatik-baslangic.md) belgesine bakınız.
+
 ---
 
 ## 22. Aşama 15 — Kullanıcı kabulü ve yayına geçiş
