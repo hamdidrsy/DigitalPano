@@ -258,7 +258,6 @@ Tüm maddeler tamamlandığında proje görev listesindeki **İlk canlı yayın�
 
 ## İlgili belgeler
 
-- [`sonAşama.md`](sonAşama.md) — VPS/IIS seçeneği dahil genel canlıya geçiş planı
 - [`18-asama-10-iis-canli-kurulum.md`](18-asama-10-iis-canli-kurulum.md) — ayrılmış IIS sunucusu kurulumu
 - [`19-asama-10-kiosk-otomatik-baslangic.md`](19-asama-10-kiosk-otomatik-baslangic.md) — Windows kiosk otomatik başlangıcı
 - [`20-asama-10-kullanici-egitimi-ve-kabul.md`](20-asama-10-kullanici-egitimi-ve-kabul.md) — kullanıcı eğitimi
