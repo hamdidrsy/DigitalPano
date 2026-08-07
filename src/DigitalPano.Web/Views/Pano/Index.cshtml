@@ -5,9 +5,11 @@
     string? logoUrl = Model.LogoMediaId.HasValue
         ? Url.Action("Media", "Pano", new { slug = Model.ScreenSlug, mediaId = Model.LogoMediaId, key = Model.DeviceKey })
         : null;
-    string tickerText = Model.TickerMessages.Count > 0
-        ? string.Join("     •     ", Model.TickerMessages)
-        : Model.InstitutionName;
+    IReadOnlyList<string> tickerMessages = Model.TickerMessages.Count > 0
+        ? Model.TickerMessages
+        : new[] { Model.InstitutionName };
+    int tickerCharacterCount = tickerMessages.Sum(message => message.Length + 6);
+    double tickerDurationSeconds = Math.Clamp(tickerCharacterCount * 0.28, 24, 90);
 }
 <!DOCTYPE html>
 <html lang="tr">
@@ -142,9 +144,19 @@
         <footer class="pano-footer">
             <span class="ticker-label">DUYURU</span>
             <div class="ticker-viewport">
-                <div class="ticker-track">
-                    <span>@tickerText</span>
-                    <span aria-hidden="true">@tickerText</span>
+                <div class="ticker-track" style="--ticker-duration: @(tickerDurationSeconds.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))s">
+                    <div class="ticker-group">
+                        @foreach (string message in tickerMessages)
+                        {
+                            <span class="ticker-message">@message</span>
+                        }
+                    </div>
+                    <div class="ticker-group" aria-hidden="true">
+                        @foreach (string message in tickerMessages)
+                        {
+                            <span class="ticker-message">@message</span>
+                        }
+                    </div>
                 </div>
             </div>
         </footer>

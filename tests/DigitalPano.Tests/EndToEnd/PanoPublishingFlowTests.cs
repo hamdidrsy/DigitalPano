@@ -87,7 +87,12 @@ public sealed class PanoPublishingFlowTests
         Assert.DoesNotContain("Süresi dolmuş duyuru", html, StringComparison.Ordinal);
         Assert.Contains("İstanbul", html, StringComparison.Ordinal);
         Assert.Contains("21°", html, StringComparison.Ordinal);
+        Assert.Equal(2, CountOccurrences(html, "class=\"ticker-group\""));
+        Assert.Contains("class=\"ticker-message\"", html, StringComparison.Ordinal);
     }
+
+    private static int CountOccurrences(string value, string search) =>
+        value.Split(search, StringSplitOptions.None).Length - 1;
 
     [Fact]
     public async Task InvalidDeviceKeyIsRejectedAcrossHttpPipeline()

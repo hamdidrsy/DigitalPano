@@ -259,15 +259,34 @@ body {
 }
 
 .ticker-track {
-  animation: ticker-scroll 35s linear infinite;
+  animation: ticker-scroll var(--ticker-duration, 35s) linear infinite;
+  align-items: center;
   color: #f8fafc;
   display: flex;
   font-size: 1.05vw;
-  min-width: max-content;
+  width: max-content;
+  will-change: transform;
 }
 
-.ticker-track span {
-  padding-right: 10vw;
+.ticker-group {
+  align-items: center;
+  display: flex;
+  flex: none;
+  gap: 4vw;
+  padding-right: 4vw;
+}
+
+.ticker-message {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+}
+
+.ticker-message:not(:last-child)::after {
+  color: var(--pano-primary);
+  content: "•";
+  font-size: .8em;
+  margin-left: 4vw;
 }
 
 @keyframes ticker-scroll {
