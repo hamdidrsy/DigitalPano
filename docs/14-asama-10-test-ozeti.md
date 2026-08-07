@@ -32,7 +32,7 @@
 - Acil duyuru normal pano içeriğini tam ekran yanıtında bastırır.
 - Service Worker ve ilk bağlantı çevrimdışı kabuğu yayımlanır.
 
-Uçtan uca testler ayrı isimli bellek içi veritabanı, sabit saat, sahte hava durumu ve geçici veri koruma anahtarları kullanır. Geliştirme LocalDB verileri ve gerçek dış servisler değiştirilmez.
+Uçtan uca testler ayrı isimli bellek içi veritabanı, sabit saat, sahte hava durumu ve geçici veri koruma anahtarları kullanır. Geliştirme PostgreSQL verileri ve gerçek dış servisler değiştirilmez.
 
 ## Çalıştırma
 
@@ -48,8 +48,8 @@ dotnet test DigitalPano.sln --filter FullyQualifiedName~EndToEnd
 
 ## Sonuç
 
-- Toplam: 66 test
-- Başarılı: 66
+- Toplam: 69 test
+- Başarılı: 69
 - Başarısız: 0
 - Derleme: 0 uyarı, 0 hata
 - Cobertura güncel kapsamı: satır %32,99 (1316/3988), dal %37,04 (333/899)

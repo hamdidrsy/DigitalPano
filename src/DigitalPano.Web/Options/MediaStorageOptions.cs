@@ -4,6 +4,8 @@ public sealed class MediaStorageOptions
 {
     public const string SectionName = "MediaStorage";
 
+    public string Provider { get; set; } = "Local";
+
     public string RootPath { get; set; } = "App_Data/media";
 
     public long MaxImageBytes { get; set; } = 10 * 1024 * 1024;

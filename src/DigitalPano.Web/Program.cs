@@ -9,8 +9,17 @@ using DigitalPano.Web.Services.Weather;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.HttpOverrides;
+using Amazon.Runtime;
+using Amazon.S3;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+string? renderPort = builder.Configuration["PORT"];
+if (int.TryParse(renderPort, out int port) && port is > 0 and <= 65535)
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection yapılandırılmalıdır.");
@@ -32,7 +41,8 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+        npgsqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null)));
 builder.Services
     .AddIdentity<AppUser, IdentityRole>(options =>
     {
@@ -70,12 +80,14 @@ builder.Services.AddHsts(options =>
 
 builder.Services.Configure<SeedAdminOptions>(
     builder.Configuration.GetSection(SeedAdminOptions.SectionName));
+string mediaProvider = builder.Configuration[$"{MediaStorageOptions.SectionName}:Provider"] ?? "Local";
 builder.Services.AddOptions<MediaStorageOptions>()
     .Bind(builder.Configuration.GetSection(MediaStorageOptions.SectionName))
     .Validate(options => options.MaxImageBytes > 0 && options.MaxVideoBytes > 0,
         "Medya dosya boyutu sınırları sıfırdan büyük olmalıdır.")
-    .Validate(options => !builder.Environment.IsProduction() || Path.IsPathRooted(options.RootPath),
-        "Production ortamında MediaStorage:RootPath mutlak bir dosya yolu olmalıdır.")
+    .Validate(options => !string.Equals(options.Provider, "Local", StringComparison.OrdinalIgnoreCase) ||
+                         !builder.Environment.IsProduction() || Path.IsPathRooted(options.RootPath),
+        "Production ortamında yerel medya yolu mutlak olmalıdır.")
     .ValidateOnStart();
 builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 210L * 1024 * 1024);
@@ -84,13 +96,55 @@ builder.Services.AddScoped<DatabaseInitializer>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IAnnouncementStatusService, AnnouncementStatusService>();
 builder.Services.AddSingleton<IInstitutionDateTimeService, InstitutionDateTimeService>();
-builder.Services.AddSingleton<IMediaStorageService, LocalMediaStorageService>();
+if (string.Equals(mediaProvider, "R2", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddOptions<R2StorageOptions>()
+        .Bind(builder.Configuration.GetSection(R2StorageOptions.SectionName))
+        .Validate(options => Uri.TryCreate(options.Endpoint, UriKind.Absolute, out Uri? endpoint) &&
+                             endpoint.Scheme == Uri.UriSchemeHttps,
+            "R2Storage:Endpoint geçerli bir HTTPS adresi olmalıdır.")
+        .Validate(options => !string.IsNullOrWhiteSpace(options.AccessKeyId) &&
+                             !string.IsNullOrWhiteSpace(options.SecretAccessKey) &&
+                             !string.IsNullOrWhiteSpace(options.BucketName),
+            "R2 erişim anahtarları ve bucket adı zorunludur.")
+        .ValidateOnStart();
+    builder.Services.AddSingleton<IAmazonS3>(serviceProvider =>
+    {
+        R2StorageOptions options = serviceProvider
+            .GetRequiredService<Microsoft.Extensions.Options.IOptions<R2StorageOptions>>().Value;
+        var credentials = new BasicAWSCredentials(options.AccessKeyId, options.SecretAccessKey);
+        var config = new AmazonS3Config
+        {
+            ServiceURL = options.Endpoint,
+            ForcePathStyle = true,
+            AuthenticationRegion = "auto"
+        };
+        return new AmazonS3Client(credentials, config);
+    });
+    builder.Services.AddSingleton<IMediaStorageService, R2MediaStorageService>();
+}
+else if (string.Equals(mediaProvider, "Local", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddSingleton<IMediaStorageService, LocalMediaStorageService>();
+}
+else
+{
+    throw new InvalidOperationException("MediaStorage:Provider yalnız Local veya R2 olabilir.");
+}
 builder.Services.AddSingleton<ISlugService, SlugService>();
 builder.Services.AddSingleton<IScreenKeyService, ScreenKeyService>();
 builder.Services.AddScoped<IPanoNotifier, SignalRPanoNotifier>();
 builder.Services.AddScoped<IWeatherService, OpenMeteoWeatherService>();
 
 WebApplication app = builder.Build();
+
+var forwardedHeadersOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwardedHeadersOptions.KnownNetworks.Clear();
+forwardedHeadersOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedHeadersOptions);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

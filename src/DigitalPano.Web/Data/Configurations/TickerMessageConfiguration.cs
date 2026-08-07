@@ -13,6 +13,6 @@ public sealed class TickerMessageConfiguration : IEntityTypeConfiguration<Ticker
 
         builder.ToTable(table => table.HasCheckConstraint(
             "CK_TickerMessages_DateRange",
-            "[EndDateUtc] > [StartDateUtc]"));
+            "\"EndDateUtc\" > \"StartDateUtc\""));
     }
 }

@@ -16,10 +16,10 @@ Bu belge Aşama 0'da alınan teknik kararları ve gerekçelerini kaydeder. Bir k
 - **Gerekçe:** Geliştirme makinesinde .NET SDK 8.0.419 kurulu ve .NET 8 LTS çizgisidir. Kurulum riski düşüktür.
 - **Sonuç:** ASP.NET Core ve Entity Framework Core paketlerinin ana sürümü 8 olacaktır. Daha yeni ana sürüme geçiş ayrı çalışma olarak değerlendirilecektir.
 
-## ADR-003 — SQL Server ve Entity Framework Core
+## ADR-003 — PostgreSQL ve Entity Framework Core
 
 - **Durum:** Kabul edildi
-- **Karar:** İlişkisel veri SQL Server'da, erişim EF Core ile yönetilecektir.
+- **Karar:** İlişkisel veri PostgreSQL'de, erişim EF Core/Npgsql ile yönetilecektir.
 - **Gerekçe:** Duyuru-ekran ilişkisi, Identity ve yayın sorguları ilişkisel modele uygundur.
 - **Sonuç:** Şema değişiklikleri migration ile izlenecektir. Geliştirme veritabanı bağlantısı Aşama 1'de doğrulanacaktır.
 
@@ -51,12 +51,12 @@ Bu belge Aşama 0'da alınan teknik kararları ve gerekçelerini kaydeder. Bir k
 - **Gerekçe:** Büyük yayın modellerini hub üzerinden taşımak yerine veri alma ve önbellek davranışını tek noktada tutar.
 - **Sonuç:** SignalR kesintisinde periyodik HTTP yenilemesi yedek olarak çalışacaktır.
 
-## ADR-008 — Yerel dosya depolama ile başlangıç
+## ADR-008 — Ortama göre medya depolama
 
-- **Durum:** Geçici kabul
-- **Karar:** İlk kurum kurulumunda medya uygulamanın yönetilen veri klasöründe saklanacaktır.
-- **Gerekçe:** Tek sunuculu kurulum için en basit ve düşük maliyetli çözümdür.
-- **Sonuç:** Dosya yolu veritabanında göreli tutulacak; fiziksel depolama bir servis arkasında soyutlanarak ileride nesne depolamaya taşınabilecektir. Medya klasörü ayrıca yedeklenecektir.
+- **Durum:** Kabul edildi
+- **Karar:** Geliştirmede yerel dosya sistemi, Render canlı ortamında Cloudflare R2 kullanılacaktır.
+- **Gerekçe:** Render'ın geçici diski yüklenen görseller için kalıcı değildir; R2 düşük maliyetli ve S3 uyumludur.
+- **Sonuç:** Dosya anahtarı veritabanında tutulur, depolama `IMediaStorageService` arkasından seçilir ve R2 bucket herkese kapalı kalır.
 
 ## ADR-009 — Desteklenen medya biçimleri
 
@@ -88,15 +88,14 @@ Bu belge Aşama 0'da alınan teknik kararları ve gerekçelerini kaydeder. Bir k
 
 ## Açık teknik kararlar
 
-- Canlı barındırma sunucusunun kesin özellikleri
+- Render ücretsiz katmanının uyku davranışının gerçek TV kullanımındaki etkisi
 - Open-Meteo ticari kullanım koşullarının canlıya geçiş öncesi kurum tarafından doğrulanması
-- Canlı medya klasörünün kesin fiziksel yolu
-- Yedekleme hedefi ve saklama süresi
+- Neon ve R2 yedekleme/saklama süresi
 - Pano cihazlarının marka, işletim sistemi ve tarayıcı sürümleri
 
-## Aşama 1 uygulama notu
+## Canlı mimari güncellemesi
 
-- **Tarih:** 3 Ağustos 2026
-- **Karar:** Geliştirme veritabanı olarak `(localdb)\\MSSQLLocalDB` üzerindeki `DigitalPano` veritabanı kullanılmaktadır.
-- **Durum:** `InitialCreate` migration'ı EF Core CLI ile başarıyla uygulanmıştır.
-- **Not:** Makinedeki `sqlcmd` istemcisinin ODBC 17 sürücü kaydı çalışmadığı için geliştirme veritabanı yönetimi `dotnet ef` üzerinden yapılacaktır. Bu durum uygulamanın SQL Server bağlantısını etkilememektedir.
+- **Tarih:** 7 Ağustos 2026
+- **Karar:** Veritabanı PostgreSQL/Npgsql, canlı medya Cloudflare R2 ve barındırma Render Docker olarak değiştirilmiştir.
+- **Durum:** PostgreSQL başlangıç migration'ı oluşturulmuş, R2 entegrasyonu ve otomatik testleri tamamlanmıştır.
+- **Not:** Eski LocalDB verileri otomatik taşınmaz. Canlı Neon veritabanı ilk dağıtımda migration ile sıfırdan hazırlanır.

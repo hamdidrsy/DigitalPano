@@ -64,7 +64,7 @@ public sealed class AppDbContextModelTests
     private static AppDbContext CreateContext()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=DigitalPanoModelTests;Trusted_Connection=True")
+            .UseNpgsql("Host=localhost;Database=DigitalPanoModelTests;Username=postgres;Password=postgres")
             .Options;
 
         return new AppDbContext(options);

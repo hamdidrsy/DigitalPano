@@ -24,6 +24,11 @@ public sealed class DatabaseInitializer(
 
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
+        if (!hostEnvironment.IsEnvironment("Testing") && dbContext.Database.IsRelational())
+        {
+            await dbContext.Database.MigrateAsync(cancellationToken);
+        }
+
         List<Screen> screensWithDevelopmentKey = hostEnvironment.IsEnvironment("Testing")
             ? []
             : await dbContext.Screens

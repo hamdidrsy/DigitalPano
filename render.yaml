@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: digitalpano
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health/live
+    autoDeployTrigger: commit
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: MediaStorage__Provider
+        value: R2
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: R2Storage__Endpoint
+        sync: false
+      - key: R2Storage__AccessKeyId
+        sync: false
+      - key: R2Storage__SecretAccessKey
+        sync: false
+      - key: R2Storage__BucketName
+        sync: false
+      - key: SeedAdmin__Enabled
+        sync: false
+      - key: SeedAdmin__Email
+        sync: false
+      - key: SeedAdmin__Password
+        sync: false
+      - key: SeedAdmin__DisplayName
+        value: Sistem Yöneticisi

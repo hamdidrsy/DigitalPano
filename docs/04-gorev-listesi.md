@@ -106,7 +106,7 @@
 - [x] XSS, CSRF, dosya yükleme ve yetki kontrollerini doğrula.
 - [x] 1920×1080 ve varsa 4K görünüm testini yap.
 - [ ] Hedef cihazda 72 saat açık kalma testi yap.
-- [x] IIS/HTTPS/SQL Server canlı kurulumunu hazırla.
+- [x] Render/HTTPS/Neon PostgreSQL/Cloudflare R2 canlı kurulumunu hazırla.
 - [ ] Veritabanı ve medya yedekleme/geri yükleme testini yap.
 - [x] Kiosk otomatik başlangıcını yapılandır.
 - [ ] Gerçek kurum verilerini gir.

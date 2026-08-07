@@ -18,6 +18,6 @@ public sealed class MediaConfiguration : IEntityTypeConfiguration<Media>
 
         builder.ToTable(table => table.HasCheckConstraint(
             "CK_Media_FileSize",
-            "[FileSize] > 0"));
+            "\"FileSize\" > 0"));
     }
 }

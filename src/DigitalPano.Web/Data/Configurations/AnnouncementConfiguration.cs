@@ -20,10 +20,10 @@ public sealed class AnnouncementConfiguration : IEntityTypeConfiguration<Announc
         {
             table.HasCheckConstraint(
                 "CK_Announcements_DateRange",
-                "[EndDateUtc] > [StartDateUtc]");
+                "\"EndDateUtc\" > \"StartDateUtc\"");
             table.HasCheckConstraint(
                 "CK_Announcements_DisplayDuration",
-                "[DisplayDurationSeconds] BETWEEN 1 AND 3600");
+                "\"DisplayDurationSeconds\" BETWEEN 1 AND 3600");
         });
 
         builder.HasOne(x => x.CreatedByUser)

@@ -1,13 +1,24 @@
 # DigitalPano
 
-Özel eğitim kursları için ASP.NET Core tabanlı dijital pano yönetim ve yayın uygulaması.
+Özel eğitim kurumları için ASP.NET Core 8 tabanlı dijital pano yönetim ve yayın uygulaması.
 
-## Gereksinimler
+## Teknoloji
 
-- .NET SDK 8.0.419 veya uyumlu .NET 8 SDK
-- SQL Server LocalDB (geliştirme) veya SQL Server
+- ASP.NET Core MVC, Identity ve SignalR
+- PostgreSQL / Entity Framework Core
+- Yerelde dosya sistemi, canlıda Cloudflare R2 medya depolama
+- Docker ile Render dağıtımı
 
 ## Yerel geliştirme
+
+Gerekenler: .NET 8 SDK ve çalışan bir PostgreSQL sunucusu. Varsayılan geliştirme bağlantısı `appsettings.json` içindedir; gerekirse User Secrets ile değiştirin:
+
+```powershell
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=digitalpano;Username=postgres;Password=PAROLANIZ" --project src/DigitalPano.Web
+dotnet user-secrets set "SeedAdmin:Enabled" "true" --project src/DigitalPano.Web
+dotnet user-secrets set "SeedAdmin:Email" "admin@example.local" --project src/DigitalPano.Web
+dotnet user-secrets set "SeedAdmin:Password" "Guclu-Bir-Parola!123" --project src/DigitalPano.Web
+```
 
 ```powershell
 dotnet restore
@@ -16,18 +27,11 @@ dotnet test
 dotnet run --project src/DigitalPano.Web
 ```
 
-Varsayılan geliştirme bağlantısı `MSSQLLocalDB` kullanır. İlk yönetici hesabı kaynak koda yazılmaz. Gerekli değerler User Secrets ile tanımlanır:
+Uygulama başlangıçta bekleyen migration'ları uygular. Elle uygulamak için:
 
 ```powershell
-dotnet user-secrets set "SeedAdmin:Enabled" "true" --project src/DigitalPano.Web
-dotnet user-secrets set "SeedAdmin:Email" "admin@example.local" --project src/DigitalPano.Web
-dotnet user-secrets set "SeedAdmin:Password" "güçlü-bir-parola" --project src/DigitalPano.Web
+dotnet tool restore
+dotnet tool run dotnet-ef database update --project src/DigitalPano.Web --startup-project src/DigitalPano.Web
 ```
 
-Migration uygulamak için:
-
-```powershell
-dotnet ef database update --project src/DigitalPano.Web --startup-project src/DigitalPano.Web
-```
-
-Proje kapsamı ve geliştirme planı `docs/` klasöründedir.
+Canlı kurulum adımları için [son_adım.md](son_adım.md) belgesini kullanın.

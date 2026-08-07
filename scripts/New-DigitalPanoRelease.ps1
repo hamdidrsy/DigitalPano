@@ -37,7 +37,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Yerel .NET araçları geri yüklenemedi.' }
 
     dotnet publish src\DigitalPano.Web\DigitalPano.Web.csproj `
-        --configuration Release --runtime win-x64 --self-contained false `
+        --configuration Release --self-contained false `
         --output $appDirectory /p:Version=$Version
     if ($LASTEXITCODE -ne 0) { throw 'dotnet publish başarısız oldu.' }
 
@@ -53,8 +53,8 @@ try {
         $env:ASPNETCORE_ENVIRONMENT = $previousEnvironment
     }
 
-    Copy-Item docs\18-asama-10-iis-canli-kurulum.md (Join-Path $outputRoot 'KURULUM.md')
-    Copy-Item deploy\sql\Create-DigitalPanoRuntimeUser.sql $databaseDirectory
+    Copy-Item son_adım.md (Join-Path $outputRoot 'KURULUM.md')
+    Copy-Item Dockerfile, render.yaml $outputRoot
 
     $manifest = Get-ChildItem $outputRoot -Recurse -File | ForEach-Object {
         [pscustomobject]@{
@@ -65,7 +65,7 @@ try {
     }
     $manifest | ConvertTo-Json | Set-Content (Join-Path $outputRoot 'manifest.json') -Encoding utf8
 
-    $zipPath = Join-Path ([System.IO.Path]::GetDirectoryName($outputRoot)) "DigitalPano-$Version-win-x64.zip"
+    $zipPath = Join-Path ([System.IO.Path]::GetDirectoryName($outputRoot)) "DigitalPano-$Version-render.zip"
     if (Test-Path -LiteralPath $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
     Compress-Archive -Path (Join-Path $outputRoot '*') -DestinationPath $zipPath -CompressionLevel Optimal
     Write-Host "Yayın paketi hazır: $zipPath" -ForegroundColor Green

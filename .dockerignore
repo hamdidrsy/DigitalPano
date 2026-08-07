@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+.git/
+.dotnet-home/
+.vs/
+.vscode/
+artifacts/
+src/DigitalPano.Web/App_Data/
+tests/
+*.user
+*.suo
