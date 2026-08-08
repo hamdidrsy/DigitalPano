@@ -34,4 +34,4 @@ dotnet tool restore
 dotnet tool run dotnet-ef database update --project src/DigitalPano.Web --startup-project src/DigitalPano.Web
 ```
 
-Canlı kurulum adımları için [son_adım.md](son_adım.md) belgesini kullanın.
+Canlı uygulama: https://digitalpano.onrender.com
